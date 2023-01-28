@@ -8,10 +8,10 @@ tmp
 pages
 resources
 public
-tests
+# tests
 commands
 config
 contracts
 providers
-start
+# start
 app
