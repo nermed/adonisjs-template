@@ -8,10 +8,8 @@ tmp
 pages
 resources
 public
-# tests
 commands
 config
 contracts
-providers
-# start
-app
+# providers
+# app
