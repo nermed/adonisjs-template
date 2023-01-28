@@ -15,10 +15,3 @@ contracts
 providers
 start
 app
-webpack.config.js
-# yarn.lock
-# .env.example
-# .env.test
-# .adonisrc.json
-# .editorconfig
-# env.ts
