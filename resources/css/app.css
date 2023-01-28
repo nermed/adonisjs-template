@@ -1,0 +1,11 @@
+@import "../views/layout/dist/css/adminlte.min.css";
+@import "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback";
+@import "../views/layout/plugins/fontawesome-free/css/all.min.css";
+@import "https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css";
+@import "../views/layout/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css";
+@import "../views/layout/plugins/icheck-bootstrap/icheck-bootstrap.min.css";
+@import "../views/layout/plugins/jqvmap/jqvmap.min.css";
+@import "../views/layout/dist/css/adminlte.min.css";
+@import "../views/layout/plugins/overlayScrollbars/css/OverlayScrollbars.min.css";
+@import "../views/layout/plugins/daterangepicker/daterangepicker.css";
+@import "../views/layout/plugins/summernote/summernote-bs4.min.css";
