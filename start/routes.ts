@@ -18,10 +18,11 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import Route from "@ioc:Adonis/Core/Route";
 
 // Route.get('/', async ({ view }) => {
 //   return view.render('welcome')
 // })
-Route.get('/', 'HomeController.index').as('home')
-Route.get('/settings', 'HomeController.settings').as('settings')
+Route.get("/", "HomeController.index").as("home");
+Route.get("/settings", "HomeController.settings").as("settings");
+Route.post("/test", "TestsController.store");
