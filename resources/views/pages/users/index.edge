@@ -1,0 +1,64 @@
+@layout('layout/main')
+{{-- @set('title', 'Settings') --}}
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+<div class="col-12">
+  <div class="col-12 d-flex justify-content-end px-4">
+    <a type="button" href="{{route('adduser')}}" class="btn btn-primary btn-sm mr-2">Add user</a>
+  </div>
+  <div class="card-body table-responsive p-0">
+    <table class="table table-hover text-nowrap">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Date</th>
+          <th>Groups</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each((user, index) in users)
+        <tr>
+          <td>{{ index+1 }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            @each(group in user.groupNames)
+            <li>{{group.groupname}}</li>
+            @endeach
+          </td>
+          <td>{{ user.deleteStatus == 0 ? 'Active' : 'Not actif' }}</td>
+          <td>{{ user.created_at.toLocaleString() }}</td>
+          <td>
+            <div class="d-flex">
+              <a type="button" href="{{route('edituser', {id: user.id})}}"
+                class="btn btn-secondary btn-sm mr-2">Edit</a>
+              <button type="button" class="btn btn-danger btn-sm">Delete</button>
+            </div>
+          </td>
+        </tr>
+        @endeach
+      </tbody>
+    </table>
+  </div>
+</div>
+@endsection

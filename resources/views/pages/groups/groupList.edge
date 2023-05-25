@@ -1,0 +1,70 @@
+@layout('layout/main')
+{{-- @set('title', 'Settings') --}}
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+<div class="col-12">
+  <div class="col-12 d-flex justify-content-end px-4">
+    <a type="button" href="{{route('addgroup')}}" class="btn btn-primary btn-sm mr-2">Add group</a>
+  </div>
+  <div class="card-body table-responsive p-0">
+    <table class="table table-hover text-nowrap">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Created By</th>
+          <th>Created At</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each((group, index) in groups)
+        <tr>
+          <td>{{ index+1 }}</td>
+          <td>{{ group.name }}</td>
+          <td>{{ group.description || '' }}</td>
+          <td>{{ group.username }}</td>
+          <td>{{ group.created_at.toLocaleString() }}</td>
+          <td>
+            <div class="d-flex">
+              <a type="button" href="{{route('editgroup', {id: group.id})}}"
+                class="btn btn-secondary btn-sm mr-2">Edit</a>
+              <form action="{{ route('deletegroup', {id: group.id})}}" method="POST">
+                <button class="btn btn-danger btn-sm">Delete</button>
+              </form>
+              {{-- <a type="button" class="btn btn-danger btn-sm">Delete</a> --}}
+            </div>
+          </td>
+        </tr>
+        @endeach
+      </tbody>
+    </table>
+  </div>
+</div>
+<nav class="col-12 d-flex justify-content-center pt-4">
+  <ul class="pagination">
+    @each(anchor in groups.getUrlsForRange(1, groups.lastPage))
+    <li class="page-item">
+      <a href="{{ anchor.url }}" class="page-link">{{ anchor.page }}</a>
+    </li>
+    @end
+  </ul>
+</nav>
+@endsection

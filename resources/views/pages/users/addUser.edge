@@ -1,0 +1,59 @@
+@layout('layout/main')
+{{-- @set('title', 'Settings') --}}
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+<div class="col-12">
+  <div class="card">
+    {{-- <div class="card-header">
+      <h3 class="card-title">Quick Example</h3>
+    </div> --}}
+    <form action="/user/add" method="POST">
+      <div class="card-body">
+        @!component('pages/components/input', {
+        name: "username",
+        label: "Username",
+        typeInput: 'text',
+        placeholder: 'Enter username'
+        })
+        @!component('pages/components/input', {
+        name: "email",
+        label: "Email",
+        typeInput: 'email',
+        placeholder: 'Enter email'
+        })
+        @!component('pages/components/input', {
+          name: "groupName",
+          label: "Group",
+          options: groups.reduce((acc, c) => ({...acc, [c.id]: c.name}), {})
+          })
+        @!component('pages/components/input', {
+        name: "password",
+        label: "Password",
+        typeInput: 'password',
+        placeholder: 'Password'
+        })
+      </div>
+
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+@endsection

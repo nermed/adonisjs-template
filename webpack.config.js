@@ -45,7 +45,9 @@ Encore.setPublicPath("/assets");
 | entrypoints.
 |
 */
-Encore.addEntry("app", ["./resources/js/app.js", "./resources/css/app.css"]);
+Encore.addEntry("app", ["./resources/js/app.js", "./resources/css/app.css"])
+  .addEntry("jQuery", "./resources/views/layout/plugins/jquery/jquery.min.js")
+  .autoProvidejQuery();
 
 /*
 |--------------------------------------------------------------------------
@@ -58,9 +60,9 @@ Encore.addEntry("app", ["./resources/js/app.js", "./resources/css/app.css"]);
 |
 */
 Encore.copyFiles({
-  from: './resources/images',
-  to: 'images/[path][name].[hash:8].[ext]',
-})
+  from: "./resources/images",
+  to: "images/[path][name].[hash:8].[ext]",
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -149,13 +151,16 @@ Encore.configureDevServerOptions((options) => {
 /**
  * Configure Babel
  */
- Encore.configureBabel((babelConfig) => {
-  // babelConfig.plugins.push('styled-jsx/babel')
-  // babelConfig.presets.push('@babel/preset-flow')
-}, {
-  exclude: /node_modules/
-})
-Encore.enableReactPreset()
+Encore.configureBabel(
+  (babelConfig) => {
+    // babelConfig.plugins.push('styled-jsx/babel')
+    // babelConfig.presets.push('@babel/preset-flow')
+  },
+  {
+    exclude: /node_modules/,
+  }
+);
+Encore.enableReactPreset();
 /*
 |--------------------------------------------------------------------------
 | CSS precompilers support

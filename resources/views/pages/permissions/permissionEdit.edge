@@ -1,0 +1,51 @@
+@layout('layout/main')
+{{-- @set('title', 'Settings') --}}
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+<div class="col-12">
+  <div class="card">
+    {{-- <div class="card-header">
+      <h3 class="card-title">Quick Example</h3>
+    </div> --}}
+    <form action="" method="POST">
+      <div class="card-body">
+        @!component('pages/components/input', {
+        name: "name",
+        label: "Group name",
+        typeInput: 'text',
+        value: permission.name,
+        placeholder: 'Enter'
+        })
+        @!component('pages/components/input', {
+        name: "description",
+        label: "Description",
+        typeInput: 'text',
+        value: permission.description,
+        placeholder: 'Enter description'
+        })
+      </div>
+
+      <div class="card-footer">
+        <a type="button" href="/permissions" class="btn btn-secondary"><i class="fa arrow-left"></i> Back</a>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+@endsection

@@ -1,0 +1,24 @@
+<div class="form-group">
+  <label for={{name}}>{{label}}</label>
+  @if(options)
+  <select name="{{ name }}" id="{{ name }}" class="form-control">
+    <option disabled selected>{{placeholder}}</option>
+    @each(key in Object.keys(options))
+    <option value="{{ key }}" {{ flashMessages.get(name) || value==key ? 'selected' : '' }}>{{ options[key] }}
+    </option>
+    @endeach
+  </select>
+  @elseif(typeInput === "textarea")
+  <textarea id={{name}} type={{typeInput}} class="form-control"
+    name={{name}}>{{ flashMessages.get(name) || value || '' }}</textarea>
+  @else
+  <input id={{name}} type={{typeInput}}
+    class="form-control {{ flashMessages.has(`errors.${name}`) ? 'is-invalid' : '' }}" name={{name}}
+    value="{{ flashMessages.get(name) || value || '' }}" />
+  @endif
+  @if(flashMessages.has(`errors.${name}`))
+  <div class="invalid-feedaback">
+    {{ flashMessages.get(`errors.${name}`) }}
+  </div>
+  @endif
+</div>

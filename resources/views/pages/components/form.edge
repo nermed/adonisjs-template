@@ -1,0 +1,36 @@
+<section>
+    <form action="" method="post">
+        <div class="row mb-3">
+            <div class="col">
+                @!component('components/input', {
+                name: "title",
+                label: "Titre",
+                value: post.title
+                })
+            </div>
+            <div class="col">
+                @!component('components/input', {
+                name: "categoryId",
+                label: "Categorie",
+                value: post.categoryId,
+                options: categories.reduce((acc, c) => ({...acc, [c.id]: c.name}), {})
+                })
+            </div>
+        </div>
+        <div class="mb-3">
+            @!component('components/input', {
+            name: "content",
+            label: "Contenu",
+            value: post.content,
+            type: 'textarea'
+            })
+        </div>
+
+        <div>
+            <input {{ post.online ? 'checked' : '' }} type="checkbox" class="form-check-input" name="online"
+                id="online">
+            <label for="online" class="form-check-label">En ligne</label>
+        </div>
+        <button class="btn btn-primary mt-4">Sauvegarder</button>
+    </form>
+</section>

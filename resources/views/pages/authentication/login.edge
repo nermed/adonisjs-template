@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login Page</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    .container {
+      margin: 0 auto;
+      max-width: 800px;
+      min-width: 500px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #3e8e41;
+    }
+
+    .error {
+      color: red;
+      margin-bottom: 10px;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .register-link a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    @media screen and (max-width: 480px) {
+      .container {
+        max-width: 100%;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Login</h1>
+    <form method="POST" action="/login">
+      {{-- <label for="email">Email</label>
+      <input type="email" id="email" name="email" required> --}}
+      @!component('pages/components/input', {
+      name: "email",
+      label: "Email",
+      typeInput: 'email',
+      placeholder: 'Email'
+      })
+
+      @!component('pages/components/input', {
+      name: "password",
+      label: "Password",
+      typeInput: 'password',
+      placeholder: 'Password'
+      })
+
+      {{--  <label for="password">Password</label>
+      <input type="password" id="password" name="password" required minlength="6">  --}}
+
+      <button type="submit">Login</button>
+
+      @if (session.has('error'))
+      <div class="error">{{ session.get('error') }}</div>
+      @endif
+    </form>
+    <div class="register-link">
+      Don't have an account? <a href="/register">Register here</a> to get started.
+    </div>
+  </div>
+</body>
+
+</html>

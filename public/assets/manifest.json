@@ -1,6 +1,7 @@
 {
   "assets/app.css": "http://localhost:8080/assets/app.css",
   "assets/app.js": "http://localhost:8080/assets/app.js",
+  "assets/jQuery.js": "http://localhost:8080/assets/jQuery.js",
   "assets/images/img/photo4.jpg": "http://localhost:8080/assets/images/img/photo4.0ebed46e.jpg",
   "assets/images/fa-solid-900.svg": "http://localhost:8080/assets/images/fa-solid-900.7a8b4f13.svg",
   "assets/images/fa-brands-400.svg": "http://localhost:8080/assets/images/fa-brands-400.2f517e09.svg",
