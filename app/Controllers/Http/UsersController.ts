@@ -16,10 +16,10 @@ export default class UsersController {
       if (acc[c.id] !== undefined) {
         acc[c.id] = {
           ...c,
-          groupNames: [...acc[c.id].groupNames, {groupname: c.groupName}],
+          groupNames: [...acc[c.id].groupNames, { groupname: c.groupName }],
         };
       } else {
-        acc[c.id] = { ...c, groupNames: [{groupname: c.groupName}] };
+        acc[c.id] = { ...c, groupNames: [{ groupname: c.groupName }] };
       }
       return { ...acc };
     }, {});
@@ -36,8 +36,25 @@ export default class UsersController {
     return view.render("pages/users/addUser", { title: "Add user", groups });
   }
 
-  async adduser({ params, request, response, session }: HttpContextContract) {
+  async adduser({
+    auth,
+    params,
+    request,
+    response,
+    session,
+  }: HttpContextContract) {
     await this.handleRequestSave(params, request, "add");
+    const userId = await Database.from(User.table)
+      .select("id")
+      .orderBy("id", "desc")
+      .limit(1)
+      .as("user_id");
+    await Database.table("user_to_groups").insert({
+      user_id: userId[0].id,
+      group_id: request.input("groupName"),
+      deleteStatus: 0,
+      createdBy: auth.user?.id,
+    });
     session.flash({ success: "L'utilisateur a été bien sauvegardé" });
     return response.redirect("/users");
   }
@@ -45,10 +62,11 @@ export default class UsersController {
   async edituserView({ view, params }: HttpContextContract) {
     const groups = await Group.all();
     const user = await User.findOrFail(params.id);
-    const userGroup = await Database.from("user_to_groups").where(
+    const userInGroup = await Database.from("user_to_groups").select('group_id').where(
       "user_id",
       params.id
     );
+    const userGroup = userInGroup.map((usr) => usr.group_id);
     return view.render("pages/users/editUser", {
       title: "Edit user",
       user,
@@ -58,7 +76,6 @@ export default class UsersController {
   }
 
   async update({ params, request, response, auth }: HttpContextContract) {
-    // await this.handleRequestSave(params, request, "update");
     const user = await User.findOrFail(params.id);
     if (user.email == request.input("email")) {
       const allRequested = await request.validate({
@@ -86,14 +103,36 @@ export default class UsersController {
       });
       user.merge({ ...user, ...allRequested }).save();
     }
-    // const verifyEmail = Database.rq
-    await Database.table("user_to_groups").insert({
-      user_id: params.id,
-      group_id: request.input("groupName"),
-      deleteStatus: 0,
-      createdBy: auth.user?.id,
-    });
+    await Database.from("user_to_groups").where("user_id", params.id).delete();
+    for (let r = 0; r < request.input("groupName").length; r++) {
+      const element = request.input("groupName")[r];
+      await Database.table("user_to_groups").insert({
+        user_id: params.id,
+        group_id: element,
+        deleteStatus: 0,
+        createdBy: auth.user?.id,
+      });
+    }
     response.redirect("/users");
+  }
+
+  async delete({ params, response, session, auth }: HttpContextContract) {
+    const userData = await User.findOrFail(params.id);
+    const user = auth.user?.id;
+    userData.merge({ ...userData, deletedBy: user, deleteStatus: true }).save();
+    session.flash({ success: "L'utilisateur a été bien supprimée" });
+    return response.redirect("/users");
+  }
+
+  async changeStatus({ request, auth }: HttpContextContract) {
+    const idUser = request.all();
+    // return idUser.userId;
+    return await Database.from(User.table)
+      .where("id", idUser.userId.split("-")[0])
+      .update({
+        deleteStatus: idUser.userId.split("-")[1] == "0" ? 1 : 0,
+        deleteBy: idUser.userId.split("-")[1] == "0" ? auth.user?.id : null,
+      });
   }
 
   private async handleRequestSave(

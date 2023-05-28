@@ -18,7 +18,7 @@
 </div>
 @endsection
 @section('body')
-<div class="col-12">
+<div class="col-12" id="user-list">
   <div class="col-12 d-flex justify-content-end px-4">
     <a type="button" href="{{route('adduser')}}" class="btn btn-primary btn-sm mr-2">Add user</a>
   </div>
@@ -46,13 +46,21 @@
             <li>{{group.groupname}}</li>
             @endeach
           </td>
-          <td>{{ user.deleteStatus == 0 ? 'Active' : 'Not actif' }}</td>
+          <td>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" {{user.deleteStatus==0 ? 'checked'
+                : 'unchecked' }} id="userList-{{user.id}}" onchange="setUserActif('{{user.id}}-{{user.deleteStatus}}')">
+            </div>
+            {{-- {{ user.deleteStatus == 0 ? 'Active' : 'Not actif' }} --}}
+          </td>
           <td>{{ user.created_at.toLocaleString() }}</td>
           <td>
             <div class="d-flex">
               <a type="button" href="{{route('edituser', {id: user.id})}}"
                 class="btn btn-secondary btn-sm mr-2">Edit</a>
-              <button type="button" class="btn btn-danger btn-sm">Delete</button>
+              {{--  <form action="{{ route('deleteuser', {id: user.id})}}" method="POST">
+                <button class="btn btn-danger btn-sm">Delete</button>
+              </form>  --}}
             </div>
           </td>
         </tr>

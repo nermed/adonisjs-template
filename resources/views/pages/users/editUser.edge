@@ -18,7 +18,7 @@
 </div>
 @endsection
 @section('body')
-<div class="col-12">
+<div class="col-12" id="editUser">
   <div class="card">
     {{-- <div class="card-header">
       <h3 class="card-title">Quick Example</h3>
@@ -44,7 +44,8 @@
         label: "Group",
         value: userGroup,
         placeholder: 'Select a group',
-        options: groups.reduce((acc, c) => ({...acc, [c.id]: c.name}), {})
+        options: groups.reduce((acc, c) => ({...acc, [c.id]: c.name}), {}),
+        multiple: true
         })
       </div>
 

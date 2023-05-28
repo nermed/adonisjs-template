@@ -40,6 +40,8 @@ Route.group(() => {
   Route.get('/user/add', 'UsersController.adduserView').as('adduser')
   Route.get('/user/edit/:id', 'UsersController.edituserView').as('edituser')
   Route.post('/user/edit/:id', 'UsersController.update')
+  Route.post('/user/delete/:id', 'UsersController.delete').as('deleteuser')
+  Route.post('/user/changeStatus', 'UsersController.changeStatus')
 
   // group
   Route.get('/groups/', 'GroupsController.index').as('groups')
@@ -59,5 +61,7 @@ Route.group(() => {
 
   // access permissions
   Route.get('/access', 'AccessesController.index').as('access')
+  Route.post('/access', 'AccessesController.storeAccess')
+  Route.post('/access/getAccess', 'AccessesController.getAccess')
 
 }).middleware('auth')
