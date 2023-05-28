@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { BaseModel, beforeSave, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, beforeSave, BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
 import Hash from "@ioc:Adonis/Core/Hash"
 
 export default class User extends BaseModel {
@@ -17,6 +17,12 @@ export default class User extends BaseModel {
 
   @column({ columnName: "deleteStatus" })
   public deleteStatus: boolean;
+
+  @belongsTo(() => User)
+  public deleteByUser: BelongsTo<typeof User>
+
+  @column({columnName: "deleteBy"})
+  public deletedBy: number
 
   @column()
   public rememberHeToken?: string

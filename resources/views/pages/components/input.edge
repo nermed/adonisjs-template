@@ -1,11 +1,17 @@
 <div class="form-group">
   <label for={{name}}>{{label}}</label>
   @if(options)
-  <select name="{{ name }}" id="{{ name }}" class="form-control">
-    <option disabled selected>{{placeholder}}</option>
+  <select name="{{ name }}" id="{{ name }}" class="form-control" {{multiple ? 'multiple' : '' }}>
+    <option disabled {{!value ? 'selected' : '' }}>{{placeholder}}</option>
     @each(key in Object.keys(options))
+    @if(Array.isArray(value))
+    <option value="{{ key }}" {{ flashMessages.get(name) || value.some(val=> val==key) ? 'selected' : '' }}>{{
+      options[key] }}
+    </option>
+    @else
     <option value="{{ key }}" {{ flashMessages.get(name) || value==key ? 'selected' : '' }}>{{ options[key] }}
     </option>
+    @endif
     @endeach
   </select>
   @elseif(typeInput === "textarea")

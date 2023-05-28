@@ -18,7 +18,7 @@
 </div>
 @endsection
 @section('body')
-<div class="col-12">
+<div class="col-12" id="addUser">
   <div class="card">
     {{-- <div class="card-header">
       <h3 class="card-title">Quick Example</h3>
@@ -40,7 +40,9 @@
         @!component('pages/components/input', {
           name: "groupName",
           label: "Group",
-          options: groups.reduce((acc, c) => ({...acc, [c.id]: c.name}), {})
+          placeholder: "Choose a group"
+          options: groups.reduce((acc, c) => ({...acc, [c.id]: c.name}), {}),
+          multiple: true
           })
         @!component('pages/components/input', {
         name: "password",
