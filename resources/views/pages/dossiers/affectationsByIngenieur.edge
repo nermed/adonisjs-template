@@ -1,0 +1,80 @@
+@layout('layout/main')
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+        <span class="font-italic">{{dossiers.length}} éléments</span>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+<div class="card col-12 p-2">
+  {{--  <div class="col-12 d-flex justify-content-end px-4">
+    @can('document_affectation')
+    <a type="button" href="{{route('adddossier')}}" class="btn btn-primary btn-sm mr-2">Ajouter un dossier</a>
+    @endcan
+    @can('document_create')
+    <a type="button" href="{{route('adddossier')}}" class="btn btn-primary btn-sm mr-2">Voir les affectations</a>
+    @endcan
+  </div>  --}}
+  <div class="card-body table-responsive pt-4">
+    <table class="table table-hover table-bordered">
+      <thead>
+        <tr>
+          {{--  <th>ID</th>  --}}
+          <th width="250">Entitulé</th>
+          <th>Message</th>
+          <th>Créé par</th>
+          <th>Date de Création</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if(dossiers.length > 0)
+        @each((dossier, index) in dossiers)
+        <tr>
+          {{--  <td>{{ index+1 }}</td>  --}}
+          <td>{{dossier.title}}</td>
+          <td>{{dossier.message}}</td>
+          <td>{{dossier.username}}</td>
+          <td>{{ dossier.created_at.toLocaleString() }}</td>
+          <td>
+            <div class="d-flex">
+              <a type="button" title="Modifier" href="{{route('editdossier', {id: dossier.id})}}"
+                class="btn btn-secondary btn-sm mr-2"><i class="fa fa-pen"></i></a>
+              <a type="button" title="Voir les détails" href="{{route('detaildossier', {id: dossier.id})}}"
+                class="btn btn-info btn-sm mr-2"><i class="fa fa-eye"></i></a>
+            </div>
+          </td>
+        </tr>
+        @endeach
+        @else
+        <tr>
+          <td colspan="5" style="text-align: center">Aucun dossier</td>
+        </tr>
+        @endif
+
+      </tbody>
+    </table>
+  </div>
+</div>
+<nav class="col-12 d-flex justify-content-center pt-4">
+  <ul class="pagination">
+    @each(anchor in dossiers.getUrlsForRange(1, dossiers.lastPage))
+    <li class="page-item">
+      <a href="{{ anchor.url }}" class="page-link">{{ anchor.page }}</a>
+    </li>
+    @endeach
+  </ul>
+</nav>
+@endsection

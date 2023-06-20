@@ -23,6 +23,9 @@
       ],
       "Database/*": [
         "./database/*"
+      ],
+      "Helpers/*": [
+        "./helpers/*"
       ]
     },
     "types": [

@@ -1,0 +1,40 @@
+@layout('layout/main')
+@section('body')
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>403 Forbidden</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .containerPage {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .containerPage h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .containerPage p {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="containerPage">
+    <h1>403 Forbidden</h1>
+    <p>You don't have permission to access this page.</p>
+    <p>If you think you should have access, please contact the website administrator.</p>
+    <a class="btn btn-primary" href="javascript:history.back()">Go Back</a>
+  </div>
+</body>
+
+</html>
+@endsection

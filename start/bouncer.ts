@@ -5,7 +5,9 @@
  * file.
  */
 
-import Bouncer from '@ioc:Adonis/Addons/Bouncer'
+import Bouncer from "@ioc:Adonis/Addons/Bouncer";
+import Database from "@ioc:Adonis/Lucid/Database";
+import User from "App/Models/User";
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +31,74 @@ import Bouncer from '@ioc:Adonis/Addons/Bouncer'
 | NOTE: Always export the "actions" const from this file
 |****************************************************************
 */
-export const { actions } = Bouncer
+const verifyPermission = async (
+  user: User,
+  permissionString: string
+): Promise<boolean> => {
+  const getUserGroup = await Database.from("user_to_groups")
+    .select("group_id")
+    .where("user_id", user.id);
+  const permissionId = await Database.from("permissions")
+    .select("id")
+    .where("name", permissionString);
+  if (permissionId.length) {
+    if (getUserGroup.length) {
+      for (let i = 0; i < getUserGroup.length; i++) {
+        const groupId = getUserGroup[i];
+        const permissionBygroup = await Database.from("group_to_permissions")
+          .select("*")
+          .where("group_id", groupId.group_id)
+          .where("permission_id", permissionId[0].id);
+        return permissionBygroup.length ? true : false;
+      }
+    } else {
+      return false;
+    }
+  }
+  return false;
+};
+export const { actions } = Bouncer.define(
+  "document_create",
+  async (user: User) => {
+    return await verifyPermission(user, "document_create");
+  }
+)
+  .define("document_edit", async (user: User, dossier: any) => {
+    if(await verifyPermission(user, "document_edit")) {
+      return dossier.created_by === user.id || dossier.assigned_to == user.id
+    }
+    return false;
+  })
+  .define('document_print', async (user: User) => {
+    return await verifyPermission(user, "document_print");
+  })
+  .define("document_affectation", async (user: User) => {
+    return await verifyPermission(user, "document_affectation");
+  })
+  .define("document_add_price", async (user: User) => {
+    return await verifyPermission(user, "document_add_price");
+  })
+  .define('document_add_project', async (user: User) => {
+    return await verifyPermission(user, "document_add_project");
+  })
+  .define('document_validate_service_demande', async (user: User) => {
+    return await verifyPermission(user, "document_validate_service_demande");
+  })
+  .define('document_validate_president_commission', async (user: User) => {
+    return await verifyPermission(user, "document_validate_president_commission");
+  })
+  .define('document_validate_disponibilite_budgetaire', async (user: User) => {
+    return await verifyPermission(user, "document_validate_disponibilite_budgetaire");
+  })
+  .define('document_validate_fonds_routier', async (user: User) => {
+    return await verifyPermission(user, "document_validate_fonds_routier");
+  })
+  .define('document_validate_direction', async (user: User) => {
+    return await verifyPermission(user, "document_validate_direction");
+  })
+  .define('document_validate_autorisation_dg_arb', async (user: User) => {
+    return await verifyPermission(user, "document_validate_autorisation_dg_arb");
+  })
 
 /*
 |--------------------------------------------------------------------------
@@ -54,4 +123,4 @@ export const { actions } = Bouncer
 | NOTE: Always export the "policies" const from this file
 |****************************************************************
 */
-export const { policies } = Bouncer.registerPolicies({})
+export const { policies } = Bouncer.registerPolicies({});

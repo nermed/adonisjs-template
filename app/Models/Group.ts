@@ -10,7 +10,7 @@ export default class Group extends BaseModel {
   public name: string
 
   @column()
-  public description?: string
+  public description: string | undefined | null
 
   @column()
   public deleteStatus: boolean

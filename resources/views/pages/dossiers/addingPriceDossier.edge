@@ -1,0 +1,91 @@
+@layout('layout/main')
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+@section('body')
+<div class="col-12 card">
+  <div id="addFileDiv">
+    {{-- <section>
+      <div id="dropzone" style="background: white;
+      border-radius: 5px;
+      border: 2px dashed rgb(0, 135, 247);
+      border-image: none;
+      height: 100px;
+      margin-top: 16px;
+      max-width: 350px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      margin-left: 24px;
+      margin-right: auto;">
+        <div class="dropzone needsclick" id="demo-upload">
+          <div class="dz-message needsclick">
+            Déposer ici ou cliquer pour télécharger le fichier.<br>
+            <span class="note needsclick">(Le fichier sera enregistré directement)</span>
+          </div>
+        </div>
+      </div>
+    </section> --}}
+    <div class="col-md-6 col-lg-6 col-sm-12">
+      @!component('pages/components/input', {
+      name: "fileDossier",
+      label: "Ajouter le fichier",
+      typeInput: 'file',
+      multiple: true
+      })
+    </div>
+  </div>
+  <div class="card-body table-responsive p4-2">
+    <table class="table table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>Designation</th>
+          <th>Nombre</th>
+          <th>Unité</th>
+          <th>Quantité</th>
+          <th>P.U HTVA</th>
+          <th>P.T HTVA</th>
+        </tr>
+      </thead>
+      <tbody id="addPriceDossierList">
+        @each(detail in details)
+        <tr idDetail="{{detail.id}}">
+          <td fromInputName="designation">{{detail.designation}}</td>
+          <td fromInputName="nombre">{{detail.nombre}}</td>
+          <td fromInputName="unite">{{detail.unite}}</td>
+          <td fromInputName="quantite">{{detail.quantite}}</td>
+          <td fromInputName="prixUnitaireHTVA">
+            <input type="number" class="form-control" value="{{detail.prixUnitaireHTVA ? detail.prixUnitaireHTVA : 0}}"
+              id="InputPrixUnitaireHTVA" name="prixUnitaireHTVA" />
+          </td>
+          <td fromInputName="prixTotalHTVA"><input type="number" readonly class="form-control"
+              value="{{detail.prixTotalHTVA ? detail.prixTotalHTVA : 0}}" id="InputPrixTotalHTVA"
+              name="prixTotalHTVA" /></td>
+        </tr>
+        @endeach
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer">
+    <a class="btn btn-secondary" href="javascript:history.back()">Retour</a>
+    <button class="btn btn-primary" id="confirmAddingPriceDossierButton">Enregistrer</button>
+  </div>
+</div>
+@endsection
+@endsection

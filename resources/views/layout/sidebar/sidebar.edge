@@ -2,40 +2,19 @@
   <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
     <!-- Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library -->
-    <li class="nav-item menu-open">
+    <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-tachometer-alt"></i>
         <p>
           Dashboard
-          <i class="right fas fa-angle-left"></i>
         </p>
       </a>
-      <ul class="nav nav-treeview">
-        <li class="nav-item">
-          <a href="./index.html" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
-            <p>Dashboard v1</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="./index2.html" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
-            <p>Dashboard v2</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="./index3.html" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
-            <p>Dashboard v3</p>
-          </a>
-        </li>
-      </ul>
     </li>
     <li class="nav-item">
-      <a href="{{route('settings')}}" class="nav-link">
-        <i class="nav-icon fas fa-th"></i>
+      <a href="{{route('dossiers')}}" class="nav-link {{(request.matchesRoute('dossiers')) ? 'active' : ''}}">
+        <i class="nav-icon fas fa-file"></i>
         <p>
-          Settings
+          Dossier
         </p>
       </a>
     </li>
@@ -43,7 +22,7 @@
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-copy"></i>
         <p>
-          User management
+          Gestion du personel
           <i class="fas fa-angle-left right"></i>
         </p>
       </a>
@@ -51,17 +30,17 @@
         <li class="nav-item">
           <a href="{{route('users')}}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Users</p>
+            <p>Utilisateurs</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="{{route('groups')}}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Groups</p>
+            <p>Groupes</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{route('permissions')}}" class="nav-link active">
+          <a href="{{route('permissions')}}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Permissions</p>
           </a>
@@ -69,7 +48,7 @@
         <li class="nav-item">
           <a href="{{route('access')}}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Access</p>
+            <p>Acces</p>
           </a>
         </li>
         @each(item in menu)
@@ -83,5 +62,13 @@
         @end
       </ul>
     </li>
+    {{--  <li class="nav-item">
+      <a href="{{route('settings')}}" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          Settings
+        </p>
+      </a>
+    </li>  --}}
   </ul>
 </nav>

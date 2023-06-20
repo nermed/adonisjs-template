@@ -64,4 +64,24 @@ Route.group(() => {
   Route.post('/access', 'AccessesController.storeAccess')
   Route.post('/access/getAccess', 'AccessesController.getAccess')
 
+  // dossiers
+  Route.get('/dossiers','logics/DossiersController.index').as('dossiers')
+  Route.get('/dossiers/affectations','logics/DossiersController.seeAssignByIngenieur').as('affectionsdossiers')
+  Route.get('/dossier/add','logics/DossiersController.addDossier').as('adddossier')
+  Route.get('/dossier/edit/:id','logics/DossiersController.editDossier').as('editdossier')
+  Route.get('/dossier/detail/:id','logics/DossiersController.detailDossier').as('detaildossier')
+  Route.post('/dossier/storeDossier','logics/DossiersController.storeDossier')
+  Route.post('/dossier/editStoreDossier/:id','logics/DossiersController.editStoreDossier')
+  Route.post('/dossier/addPriceDossier/:id','logics/DossiersController.addPriceDossier')
+  Route.post('/dossier/confirmDossier/:id','logics/DossiersController.confirmDossier')
+  Route.post('/dossier/denieDossier/:id','logics/DossiersController.denieDossier')
+  Route.post('/dossier/uploadFile/:id','logics/DossiersController.uploadFile')
+
+  // projet commande
+  Route.get('/dossier/projetCommande/:id','logics/ProjetCommandesController.index').as('projetcommandes')
+  Route.get('/dossier/projetCommande/add/:id','logics/ProjetCommandesController.addProjetCommande').as('addprojetcommandes')
+  Route.get('/dossier/projetCommande/edit/:id','logics/ProjetCommandesController.editProjetCommande').as('editprojetcommandes')
+  Route.post('/dossier/projetCommande/storeProjetCommande/:id','logics/ProjetCommandesController.storeProjetCommande')
+  Route.post('/dossier/projetCommande/storeEditProjetCommande/:id','logics/ProjetCommandesController.storeEditProjetCommande')
+  Route.post('/dossier/projetCommande/confirmProjetCommande/:id','logics/ProjetCommandesController.confirmProjetCommande')
 }).middleware('auth')

@@ -9,7 +9,7 @@
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
           <li class="breadcrumb-item active">{{title}}</li>
         </ol>
       </div><!-- /.col -->
@@ -40,7 +40,6 @@
         @!component('pages/components/input', {
           name: "groupName",
           label: "Group",
-          placeholder: "Choose a group"
           options: groups.reduce((acc, c) => ({...acc, [c.id]: c.name}), {}),
           multiple: true
           })

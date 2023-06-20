@@ -1,0 +1,190 @@
+@layout('layout/main')
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+        <span class="font-italic">Projet de commande de <span class="font-weight-bolder text-uppercase">{{dossier_detail.designation}}</span></span>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+<div class="col-12" id="addProjetCommande">
+  <div class="card p-4">
+    <div class="col-12 border-bottom" id="addProjetCommandeHeader">
+      <div class="col-12 row">
+        <p class="mr-4">Traitement</p>
+        <div class="form-group clearfix">
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="traitement1" name="t1" ref="normal">
+            <label for="traitement1">
+              Normal
+            </label>
+          </div>
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="traitement2" name="t1" ref="urgence">
+            <label for="traitement2">
+              Urgence
+            </label>
+          </div>
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="traitement3" name="t1" ref="prioritaire">
+            <label for="traitement3">
+              Prioritaire
+            </label>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-12 row">
+        <p class="mr-4">Origine du Projet de Commande</p>
+        <div class="form-group clearfix">
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="origine1" name="o1" ref="dg/arb">
+            <label for="origine1">
+              DG/ARB
+            </label>
+          </div>
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="origine2" name="o1" ref="dfr">
+            <label for="origine2">
+              DFR
+            </label>
+          </div>
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="origine3" name="o1" ref="detr">
+            <label for="origine3">
+              DTR
+            </label>
+          </div>
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="origine4" name="o1" ref="axe">
+            <label for="origine4">
+              Chef d'axe
+            </label>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-12 row align-items-center">
+        <p class="mr-4">Personne à Avertir</p>
+        <div class="col-sm-12 col-lg-4 col-md-4">
+          <div class="form-group">
+            <input type="text" class="form-control" id="personneAvertir1">
+          </div>
+        </div>
+        <div class="col-sm-12 col-lg-4 col-md-4">
+          <div class="form-group">
+            <input type="text" class="form-control" id="personneAvertir2">
+          </div>
+        </div>
+      </div>
+      <div class="col-12 row align-items-center">
+        <p class="mr-4">Information du chantier</p>
+        <div class="col-sm-12 col-lg-4 col-md-4">
+          <div class="form-group">
+            <input type="text" class="form-control" id="infoChantier">
+          </div>
+        </div>
+      </div>
+      <div class="col-12 row align-items-center">
+        <p class="mr-4">Date d'Emission</p>
+        <div class="col-sm-12 col-lg-4 col-md-4">
+          <div class="form-group">
+            <input type="date" class="form-control" id="dateEmission">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 row pt-4" id="addProjetCommandeList">
+      <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "refPostBudget",
+        label: "Réference Poste-Budget",
+        typeInput: 'text',
+        })
+      </div>
+      <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "numeroRef",
+        label: "Numéro de Réference",
+        typeInput: 'text',
+        })
+      </div>
+      <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "designationAffectation",
+        label: "Désignation-Affectation",
+        typeInput: 'text',
+        })
+      </div>
+      <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "quantiteDemande",
+        label: "Quantité Demandée",
+        typeInput: 'number',
+        helper: true,
+        helperMessage: `La quantité totale est de ${dossier_detail.quantite}`,
+        })
+      </div>
+      {{-- <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "montantEstime",
+        label: "Montant Estimé",
+        typeInput: 'number',
+        })
+      </div>
+      <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "niveauStockMagasin",
+        label: "Niveau Stock Magasin",
+        typeInput: 'text',
+        })
+      </div> --}}
+      <div class="col-sm-12 col-lg-12 col-md-12">
+        @!component('pages/components/input', {
+        name: "observation",
+        label: "Observation",
+        typeInput: 'textarea',
+        })
+      </div>
+      <div class="col-sm-12 col-lg-12 col-md-12">
+        <button class="btn btn-secondary" id="addProjetCommandeBtn">Ajouter sur la liste</button>
+        <button class="btn btn-default" id="resetInputProjetCommande">Réinitialiser</button>
+      </div>
+    </div>
+    <div class="table-responsive pt-4">
+      <table class="table table-hover table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Réference poste-Budget</th>
+            <th width="150">Nº de réference</th>
+            <th width="180">Désignation-Affectation</th>
+            <th width="180">Quantité Demandée</th>
+            {{-- <th width="100">Montant Estimé</th>
+            <th width="110">Niveau Stock Magasin</th> --}}
+            <th>Observation</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="projetCommandeList">
+
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer">
+      <a class="btn btn-secondary" href="javascript:history.back()">Retour</a>
+      <button class="btn btn-primary" id="addProjetCommandeButton" idDossierDetail="{{params.id}}">Enregistrer</button>
+    </div>
+  </div>
+</div>
+@endsection

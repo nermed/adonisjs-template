@@ -9,7 +9,7 @@
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
           <li class="breadcrumb-item active">{{title}}</li>
         </ol>
       </div><!-- /.col -->
@@ -20,17 +20,17 @@
 @section('body')
 <div class="col-12">
   <div class="col-12 d-flex justify-content-end px-4">
-    <a type="button" href="{{route('addpermission')}}" class="btn btn-primary btn-sm mr-2">Add permission</a>
+    <a type="button" href="{{route('addpermission')}}" class="btn btn-primary btn-sm mr-2">Ajouter une permission</a>
   </div>
   <div class="card-body table-responsive p-0">
     <table class="table table-hover text-nowrap">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Name</th>
+          <th>Nº</th>
+          <th>Code</th>
           <th>Description</th>
-          <th>Created By</th>
-          <th>Created At</th>
+          <th>Créé par</th>
+          <th>Date de Création</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -45,9 +45,9 @@
           <td>
             <div class="d-flex">
               <a type="button" href="{{route('editpermission', {id: permission.id})}}"
-                class="btn btn-secondary btn-sm mr-2">Edit</a>
+                class="btn btn-secondary btn-sm mr-2">Modifier</a>
               <form action="{{ route('deletepermission', {id: permission.id})}}" method="POST">
-                <button class="btn btn-danger btn-sm">Delete</button>
+                <button class="btn btn-danger btn-sm">Supprimer</button>
               </form>
               {{-- <a type="button" class="btn btn-danger btn-sm">Delete</a> --}}
             </div>

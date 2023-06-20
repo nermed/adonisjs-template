@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # mysql:
+  #   container_name: mysql8
+  #   image: mysql:8.0
+  #   volumes:
+  #     - mysql_volume:/var/lib/mysql
+  #     - ./dockerConfig/db.sql:/docker-entrypoint-initdb.d/init.sql
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_USER: nermed
+  #     MYSQL_PASSWORD: nermed123456
+  #     MYSQL_DATABASE: gestionChantier
+  #   ports:
+  #     - 3300:3306
+  xampp:
+    container_name: xampp-container
+    image: tomsik68/xampp:7.4.27
+    volumes:
+      - ~/gestionChantier:/www tomsik68/xampp
+    ports:
+      - 41062:80
+      - 41061:22
+      # - 41063:3306
+
+  redis:
+    container_name: redis
+    image: redis:6-alpine
+    volumes:
+      - redis_volume:/data
+    ports:
+      - 6379:6379
+
+  # phpmyadmin:
+  #   image: phpmyadmin
+  #   container_name: phpmyadmin
+  #   restart: always
+  #   ports:
+  #     - 8800:80
+  #   environment:
+  #     - PMA_ARBITRARY=1
+
+  gestionchantier:
+    container_name: gestionchantier
+    restart: always
+    depends_on:
+      - xampp
+      - redis
+      # - phpmyadmin
+    build:
+      context: .
+      target: dependencies
+    ports:
+      - ${PORT}:${PORT}
+      - 9229:9229
+    env_file:
+      - .env
+    environment:
+      - PG_HOST=mysql
+      - REDIS_HOST=redis
+      # - PMA_HOST=phpmyadmin
+    volumes:
+      - ./:/home/node/app
+    command: dumb-init node ace serve --watch --node-args="--inspect=0.0.0.0"
+
+volumes:
+  # mysql_volume:
+  xampp_volume:
+  redis_volume:

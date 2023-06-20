@@ -1,0 +1,148 @@
+@layout('layout/main')
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+<div class="card" id="dossierDetail">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        Bordereau de détail estimatif et quantitatif pour les travaux de réhabilitation de <span
+          style="font-size:16px;font-weight:700">{{ dossier[0].title }}</span>
+      </div>
+      <div id="actionDossierDetail" class="d-print-none">
+        @if(dossier[0].dossier_niveau != '7')
+        @if(dossier[0].dossier_niveau == '1' || dossier[0].dossier_niveau == '2')
+        <a type="button" href="{{route('editdossier', {id: dossier[0].id})}}" class="btn btn-primary">Modifier</a>
+        @endif
+        <button class="btn btn-warning" idDossier="{{dossier[0].id}}" id="dossierDetailConfirm">Valider</button>
+        @if(dossier[0].dossier_niveau != '1' || dossier[0].dossier_niveau != '0')
+        <button class="btn btn-danger" idDossier="{{dossier[0].id}}" id="dossierDetailRefuse">Décliner</button>
+        @endif
+        @else
+        @can('document_print')
+        <button class="btn btn-default" onclick="printDossierDetail()">Imprimer</button>
+        @endcan
+        @endif
+      </div>
+    </div>
+  </div>
+  <div class="card-body table-responsive p-0">
+    <table class="table table-hover table-bordered" id="tableDossierDetail">
+      <thead>
+        <tr>
+          <th>Nº</th>
+          <th>Designation</th>
+          {{-- <th>Nombre</th> --}}
+          <th>Unité</th>
+          <th>Quantité</th>
+          <th>P.U HTVA</th>
+          <th>P.T HTVA</th>
+          <th width="100" class="d-print-none">Projet Commande</th>
+          {{-- @cannot('document_add_price') --}}
+          <th class="d-print-none">Action</th>
+          {{-- @endcannot --}}
+        </tr>
+      </thead>
+      <tbody id="addDossierList">
+        @each((detail, index) in details)
+        <tr>
+          <td>{{index + 1}}</td>
+          <td>{{detail.designation}}</td>
+          {{-- <td>{{detail.nombre}}</td> --}}
+          <td>{{detail.unite}}</td>
+          <td>{{formatAmount(detail.quantite)}}</td>
+          <td>{{detail.prixUnitaireHTVA ? formatAmount(detail.prixUnitaireHTVA) : 0}}</td>
+          <td>{{detail.prixTotalHTVA ? formatAmount(detail.prixTotalHTVA): 0}}</td>
+          <td class="d-print-none">{{detail.id_projet_commande ? 'Oui' : 'Non'}}</td>
+          {{-- @cannot('document_add_price') --}}
+          <td class="d-print-none"><a type="button" href="{{route('projetcommandes', {id: detail.id})}}"
+              class="btn btn-primary btn-sm"><i class="fa fa-arrow-right"></i></a></td>
+          {{-- @endcannot --}}
+        </tr>
+        @endeach
+        <tr>
+          <td></td>
+          <td>TOTAL</td>
+          {{-- <td>{{totals.nombreTotal}}</td> --}}
+          <td></td>
+          <td>{{formatAmount(totals.quantite)}}</td>
+          <td>{{formatAmount(totals.prixUnitaireHTVATotal)}}</td>
+          <td>{{formatAmount(totals.prixTotalHTVATotal)}}</td>
+          <td class="d-print-none"></td>
+          <td class="d-print-none"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>ALEAS DE (12%)</td>
+          {{-- <td></td> --}}
+          <td></td>
+          <td></td>
+          <td>{{formatAmount(totals.prixUnitaireHTVATotal * 0.12)}}</td>
+          <td>{{formatAmount(totals.prixTotalHTVATotal * 0.12)}}</td>
+          <td class="d-print-none"></td>
+          <td class="d-print-none"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>TOTAL GENERAL AVEC TVA DE (18%)</td>
+          {{-- <td></td> --}}
+          <td></td>
+          <td></td>
+          <td>{{formatAmount(totals.prixUnitaireHTVATotal * 0.18)}}</td>
+          <td>{{formatAmount(totals.prixTotalHTVATotal * 0.18)}}</td>
+          <td class="d-print-none"></td>
+          <td class="d-print-none"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>TOTAL GENERAL TVAC</td>
+          {{-- <td></td> --}}
+          <td></td>
+          <td></td>
+          <td>{{formatAmount(totals.prixUnitaireHTVATotal * 1.18)}}</td>
+          <td>{{formatAmount(totals.prixTotalHTVATotal * 1.18)}}</td>
+          <td class="d-print-none"></td>
+          <td class="d-print-none"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-body d-print-none">
+    <div>
+      <h6 class="font-weight-bold">Remarques: </h6>
+      <span class="font-italic">{{messages.length}} message{{messages.length > 1 ? 's' : ''}}</span>
+    </div>
+    <div class="border"></div>
+    @if(messages.length > 0)
+    @each(message in messages)
+    <div class="card m-4 p-2">
+      <span class="font-weight-bold">{{message.username}}:</span>
+      <p class="ml-2">{{message.message}}</p>
+      <div class="d-flex justify-content-end">
+        <span class="">Sur le projet de commande <span class="font-italic">{{message.designation}}</span>,
+          {{message.created_at.toLocaleString()}}</span>
+      </div>
+    </div>
+    @endeach
+
+    @else
+    <p>Pas de message</p>
+    @endif
+  </div>
+</div>
+@endsection

@@ -9,7 +9,7 @@
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
           <li class="breadcrumb-item active">{{title}}</li>
         </ol>
       </div><!-- /.col -->
@@ -20,18 +20,18 @@
 @section('body')
 <div class="col-12" id="user-list">
   <div class="col-12 d-flex justify-content-end px-4">
-    <a type="button" href="{{route('adduser')}}" class="btn btn-primary btn-sm mr-2">Add user</a>
+    <a type="button" href="{{route('adduser')}}" class="btn btn-primary btn-sm mr-2">Ajouter l'utilisateur</a>
   </div>
   <div class="card-body table-responsive p-0">
     <table class="table table-hover text-nowrap">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>User</th>
+          <th>Nº</th>
+          <th>Pseudo</th>
           <th>Date</th>
-          <th>Groups</th>
-          <th>Status</th>
-          <th>Created At</th>
+          <th>Groupes</th>
+          <th>Statut</th>
+          <th>Date de Création</th>
           <th>Action</th>
         </tr>
       </thead>

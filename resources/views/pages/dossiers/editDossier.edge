@@ -1,0 +1,118 @@
+@layout('layout/main')
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+@section('body')
+<div class="col-12">
+  <div class="card" id="editDossier">
+    {{-- <div class="card-header">
+      <h3 class="card-title">Quick Example</h3>
+    </div> --}}
+    {{-- <form action="/group/add" method="POST"> --}}
+      <div class="card-body">
+        <div class="col-sm-6 col-md-6">
+          @!component('pages/components/input', {
+          name: "title",
+          label: "Intitulé du dossier",
+          typeInput: 'text',
+          value: dossier.title,
+          placeholder: 'Enter',
+          })
+        </div>
+        <div style="height: 2px; width: 100%; background-color: lightgray; margin-bottom: 8px; border-radius: 4px">
+        </div>
+        <div id="editDossierDetailAdding">
+          @!component('pages/components/input', {
+          name: "designation",
+          label: "Désignation",
+          typeInput: 'text',
+          placeholder: 'Enter designation',
+          })
+          {{-- </div> --}}
+        <div class="row">
+          {{-- <div class="col-md-3 col-sm-12">
+            @!component('pages/components/input', {
+            name: "nombre",
+            label: "Nombre",
+            typeInput: 'text',
+            placeholder: 'Enter description'
+            })
+          </div> --}}
+          <div class="col-md-4 col-sm-12">
+            @!component('pages/components/input', {
+            name: "unite",
+            label: "Unité",
+            typeInput: 'text',
+            placeholder: 'Enter description'
+            })
+          </div>
+          <div class="col-md-4 col-sm-12">
+            @!component('pages/components/input', {
+            name: "quantite",
+            label: "Quantité",
+            typeInput: 'text',
+            placeholder: 'Enter description'
+            })
+          </div>
+          <div class="col-md-4 col-sm-12 row" style="align-self: center">
+            <div class="mr-2">
+              <p></p>
+              <button class="btn btn-secondary" id="addDossierInArrayInEdit">Ajouter</button>
+            </div>
+            <div>
+              <p></p>
+              <button class="btn btn-default" id="resetDossierInArray">Réinitialiser</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="card-body table-responsive p-0">
+    <table class="table table-hover text-nowrap">
+      <thead>
+        <tr>
+          <th>Designation</th>
+          {{-- <th>Nombre</th> --}}
+          <th>Unité</th>
+          <th>Quantité</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="editDossierList">
+        @each(detail in details)
+        <tr idDetail="{{detail.id}}">
+          <td fromInputName="designation">{{detail.designation}}</td>
+          {{-- <td fromInputName="nombre">{{detail.nombre}}</td> --}}
+          <td fromInputName="unite">{{detail.unite}}</td>
+          <td fromInputName="quantite">{{detail.quantite}}</td>
+          <td><button class='btn btn-secondary btn-sm mr-2' id='{{detail.id}}-editElement'
+              onclick='editElementForDossierEditing({{detail.id}})'><i class='fa fa-pen'></i></button><button
+              class='btn btn-danger btn-sm' id='{{detail.id}}-editElement' onclick='deleteElement({{detail.id}})'><i
+                class='fa fa-minus'></i></button></td>
+        </tr>
+        @endeach
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer">
+    <a class="btn btn-secondary" href="javascript:history.back()">Retour</a>
+    <button class="btn btn-primary" id="confirmEditDossierButton">Enregistrer</button>
+  </div>
+</div>
+@endsection
+@endsection

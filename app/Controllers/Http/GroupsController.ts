@@ -59,7 +59,7 @@ export default class GroupsController {
   ) {
     const group = params.id ? await Group.findOrFail(params.id) : new Group();
     const req = await request.validate(GroupValidator);
-    const user = auth.user?.id;
+    const user = auth.user ? auth.user.id : null;
     switch (operationType) {
       case "add":
         group.merge({ ...req, createdBy: user }).save();

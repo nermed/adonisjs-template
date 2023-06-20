@@ -1,0 +1,73 @@
+@layout('layout/main')
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+@section('body')
+<div class="col-12">
+  <div class="card" id="createDossier">
+    <div class="card-body">
+      <div class="col-sm-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "title",
+        label: "Intitulé du dossier",
+        typeInput: 'text',
+        placeholder: 'Enter'
+        })
+      </div>
+      <div style="height: 2px; width: 100%; background-color: lightgray; margin-bottom: 8px; border-radius: 4px">
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-sm-12">
+          @!component('pages/components/input', {
+          name: "assignation",
+          label: "Assignation (ingénieur principal)",
+          typeInput: 'text',
+          options: users.reduce((acc, c) => ({...acc, [c.id]: c.username}), {}),
+          helper: true,
+          helperMessage: "Seul cet ingénieur pourra compléter le bordereau",
+          })
+        </div>
+        <div class="col-md-6 col-lg-6 col-sm-12">
+          @!component('pages/components/input', {
+          name: "assignations",
+          label: "Assignation",
+          typeInput: 'text',
+          options: users.reduce((acc, c) => ({...acc, [c.id]: c.username}), {}),
+          multiple: true,
+          helper: true,
+          helperMessage: "Ces ingénieurs pourront assister à l'ingénieur principal",
+          })
+        </div>
+        <div class="col-md-6 col-lg-6 col-sm-12">
+          @!component('pages/components/input', {
+          name: "message",
+          label: "Message de notification",
+          typeInput: 'textarea',
+          })
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a class="btn btn-secondary" href="javascript:history.back()">Retour</a>
+      <button class="btn btn-primary" id="createDossierButton">Enregistrer</button>
+    </div>
+  </div>
+</div>
+</div>
+@endsection
+@endsection

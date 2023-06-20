@@ -10,7 +10,7 @@ export default class Permission extends BaseModel {
   public name: string
 
   @column()
-  public description: string
+  public description: string | null | undefined
 
   @column()
   public deleteStatus: boolean

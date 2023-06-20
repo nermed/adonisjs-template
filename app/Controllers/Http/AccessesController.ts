@@ -5,7 +5,7 @@ import Permission from "App/Models/Permission";
 
 export default class AccessesController {
   async index({ view }: HttpContextContract) {
-    const groups = await Database.from(Group.table);
+    const groups = await Database.from(Group.table).where('delete_status', '0');
     const permissions = await Database.from(Permission.table);
     const dataRanged = this.rangePermissionsData(permissions);
     // console.log(dataRanged);

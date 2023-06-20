@@ -1,0 +1,215 @@
+@layout('layout/main')
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+<div class="col-12" id="editProjetCommande">
+  <div class="card p-4">
+    <div class="col-12 border-bottom" id="editProjetCommandeHeader">
+      <div class="col-12 row">
+        <p class="mr-4">Traitement</p>
+        <div class="form-group clearfix">
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="traitement1" name="t1" ref="normal" {{ projetCommande.traitement=='normal'
+              ? 'checked' : '' }}>
+            <label for="traitement1">
+              Normal
+            </label>
+          </div>
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="traitement2" name="t1" ref="urgence" {{ projetCommande.traitement=='urgence'
+              ? 'checked' : '' }}>
+            <label for="traitement2">
+              Urgence
+            </label>
+          </div>
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="traitement3" name="t1" ref="prioritaire" {{ projetCommande.traitement=='prioritaire'
+              ? 'checked' : '' }}>
+            <label for="traitement3">
+              Prioritaire
+            </label>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-12 row">
+        <p class="mr-4">Origine du Projet de Commande</p>
+        <div class="form-group clearfix">
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="origine1" name="o1" ref="dg/arb" {{ projetCommande.origineProjet=='dg/arb'
+              ? 'checked' : '' }}>
+            <label for="origine1">
+              DG/ARB
+            </label>
+          </div>
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="origine2" name="o1" ref="dfr" {{ projetCommande.origineProjet=='dfr' ? 'checked'
+              : '' }}>
+            <label for="origine2">
+              DFR
+            </label>
+          </div>
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="origine3" name="o1" ref="detr" {{ projetCommande.origineProjet=='detr' ? 'checked'
+              : '' }}>
+            <label for="origine3">
+              DTR
+            </label>
+          </div>
+          <div class="icheck-primary d-inline mr-4">
+            <input type="radio" id="origine3" name="o1" ref="axe" {{ projetCommande.origineProjet=='axe' ? 'checked'
+              : '' }}>
+            <label for="origine3">
+              Chef d'axe
+            </label>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-12 row align-items-center">
+        <p class="mr-4">Personne à Avertir</p>
+        @if(projetCommande.personneAvertir == undefined)
+        @each((personne, indexPersonne) in projetCommande.personneAvertir.split(";"))
+        <div class="col-sm-12 col-lg-4 col-md-4">
+          <div class="form-group">
+            <input type="text" class="form-control" value="{{personne}}" id="personneAvertir{{indexPersonne + 1}}">
+          </div>
+        </div>
+        @endeach
+        @else
+        <div class="col-sm-12 col-lg-4 col-md-4">
+          <div class="form-group">
+            <input type="text" class="form-control" id="personneAvertir1">
+          </div>
+        </div>
+        @endif
+      </div>
+      <div class="col-12 row align-items-center">
+        <p class="mr-4">Information du chantier</p>
+        <div class="col-sm-12 col-lg-4 col-md-4">
+          <div class="form-group">
+            <input type="text" class="form-control" value="{{projetCommande.info_chantier}}" id="infoChantier">
+          </div>
+        </div>
+      </div>
+      <div class="col-12 row align-items-center">
+        <p class="mr-4">Date d'Emission</p>
+        <div class="col-sm-12 col-lg-4 col-md-4">
+          <div class="form-group">
+            <input type="date" class="form-control"
+              value="{{new Date(projetCommande.date_emission).toISOString().split('T')[0]}}" id="dateEmission">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 row pt-4" id="editProjetCommandeList">
+      <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "ref_post_budget",
+        label: "Réference Poste-Budget",
+        typeInput: 'text',
+        })
+      </div>
+      <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "numeroRef",
+        label: "Numéro de Réference",
+        typeInput: 'text',
+        })
+      </div>
+      <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "designationAffectation",
+        label: "Désignation-Affectation",
+        typeInput: 'text',
+        })
+      </div>
+      <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "quantiteDemande",
+        label: "Quantité Demandée",
+        typeInput: 'number',
+        })
+      </div>
+      {{--  <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "montantEstime",
+        label: "Montant Estimé",
+        typeInput: 'number',
+        })
+      </div>
+      <div class="col-sm-12 col-lg-6 col-md-6">
+        @!component('pages/components/input', {
+        name: "niveauStockMagasin",
+        label: "Niveau Stock Magasin",
+        typeInput: 'text',
+        })
+      </div>  --}}
+      <div class="col-sm-12 col-lg-12 col-md-12">
+        @!component('pages/components/input', {
+        name: "observation",
+        label: "Observation",
+        typeInput: 'textarea',
+        })
+      </div>
+      <div class="col-sm-12 col-lg-12 col-md-12">
+        <button class="btn btn-secondary" id="addProjetCommandeEditBtn">Ajouter sur la liste</button>
+        <button class="btn btn-default" id="resetInputProjetCommande">Réinitialiser</button>
+      </div>
+    </div>
+    <div class="table-responsive pt-4">
+      <table class="table table-hover table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Réference Post-Budget</th>
+            <th width="100">Nº de réference</th>
+            <th width="80">Désignation-Affectation</th>
+            <th width="40">Quantité Demandée</th>
+            {{--  <th width="100">Montant Estimé</th>
+            <th width="110">Niveau Stock Magasin</th>  --}}
+            <th>Observation</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="projetCommandeEditList">
+          @each((detail, index) in details)
+          <tr idDetail="{{detail.id}}">
+            <td fromInputName="ref_post_budget">{{detail.ref_post_budget}}</td>
+            <td fromInputName="numeroRef">{{detail.numeroRef}}</td>
+            <td fromInputName="designationAffectation">{{detail.designationAffectation}}</td>
+            <td fromInputName="quantiteDemande">{{detail.quantiteDemande}}</td>
+            {{--  <td fromInputName="montantEstime">{{detail.montantEstime}}</td>
+            <td fromInputName="niveauStockMagasin">{{detail.niveauStockMagasin}}</td>  --}}
+            <td fromInputName="observation">{{detail.observation}}</td>
+            <td><button class='btn btn-secondary btn-sm mr-2' id='{{detail.id}}-editElement'
+                onclick='editElementForProjetEditing({{detail.id}})'><i class='fa fa-pen'></i></button><button
+                class='btn btn-danger btn-sm' id='{{detail.id}}-editElement' onclick='deleteElement({{detail.id}})'><i
+                  class='fa fa-minus'></i></button></td>
+          </tr>
+          @endeach
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer">
+      <a class="btn btn-secondary" href="javascript:history.back()">Retour</a>
+      <button class="btn btn-primary" id="confirmEditProjetButton"
+        idProjetCommandeDetail="{{projetCommande.id}}">Enregistrer</button>
+    </div>
+  </div>
+</div>
+@endsection

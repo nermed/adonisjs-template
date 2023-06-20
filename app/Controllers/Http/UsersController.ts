@@ -11,8 +11,8 @@ export default class UsersController {
     const req = await Database.rawQuery(
       "SELECT user.*, groupp.name as groupName FROM users as user left join user_to_groups as userGroup on user.id = userGroup.user_id left join groups as groupp on groupp.id = userGroup.group_id"
     ).exec();
-    const reducers = req[0].reduce(function (acc, c) {
-      let news = {};
+    const reducers = req[0].reduce(function (acc: any, c: any) {
+      // let news = {};
       if (acc[c.id] !== undefined) {
         acc[c.id] = {
           ...c,
@@ -26,14 +26,17 @@ export default class UsersController {
 
     const users = Object.values(reducers);
     return view.render("pages/users/index", {
-      title: "Users",
+      title: "Utilisateurs",
       users: users,
     });
   }
 
   async adduserView({ view }: HttpContextContract) {
-    const groups = await Group.all();
-    return view.render("pages/users/addUser", { title: "Add user", groups });
+    const groups = await Database.from(Group.table).where("delete_status", "0");
+    return view.render("pages/users/addUser", {
+      title: "Ajouter l'utilisateur",
+      groups,
+    });
   }
 
   async adduser({
@@ -43,30 +46,43 @@ export default class UsersController {
     response,
     session,
   }: HttpContextContract) {
-    await this.handleRequestSave(params, request, "add");
-    const userId = await Database.from(User.table)
-      .select("id")
-      .orderBy("id", "desc")
-      .limit(1)
-      .as("user_id");
-    await Database.table("user_to_groups").insert({
-      user_id: userId[0].id,
-      group_id: request.input("groupName"),
-      deleteStatus: 0,
-      createdBy: auth.user?.id,
-    });
+    const user = await this.handleRequestSave(params, request, "add", auth);
+    // const userId = await Database.from(User.table)
+      // .select("id")
+      // .orderBy("id", "desc")
+      // .limit(1)
+      // .as("user_id");
+      const groupName = request.input("groupName");
+      if (Array.isArray(groupName)) {
+        for (let r = 0; r < request.input("groupName").length; r++) {
+          const groupdId = request.input("groupName")[r];
+          await Database.table("user_to_groups").insert({
+            user_id: user?.id,
+            group_id: groupdId,
+            deleteStatus: 0,
+            createdBy: auth.user?.id,
+          });
+        }
+      } else {
+        await Database.table("user_to_groups").insert({
+          user_id: user?.id,
+          group_id: groupName,
+          deleteStatus: 0,
+          createdBy: auth.user?.id,
+        });
+      }
     session.flash({ success: "L'utilisateur a été bien sauvegardé" });
     return response.redirect("/users");
   }
 
   async edituserView({ view, params }: HttpContextContract) {
-    const groups = await Group.all();
+    const groups = await Database.from(Group.table).where("delete_status", "0");
     const user = await User.findOrFail(params.id);
-    const userInGroup = await Database.from("user_to_groups").select('group_id').where(
-      "user_id",
-      params.id
-    );
+    const userInGroup = await Database.from("user_to_groups")
+      .select("group_id")
+      .where("user_id", params.id);
     const userGroup = userInGroup.map((usr) => usr.group_id);
+    console.log(userGroup);
     return view.render("pages/users/editUser", {
       title: "Edit user",
       user,
@@ -104,15 +120,26 @@ export default class UsersController {
       user.merge({ ...user, ...allRequested }).save();
     }
     await Database.from("user_to_groups").where("user_id", params.id).delete();
-    for (let r = 0; r < request.input("groupName").length; r++) {
-      const element = request.input("groupName")[r];
+    const groupName = request.input("groupName");
+    if (Array.isArray(groupName)) {
+      for (let r = 0; r < request.input("groupName").length; r++) {
+        const groupdId = request.input("groupName")[r];
+        await Database.table("user_to_groups").insert({
+          user_id: params.id,
+          group_id: groupdId,
+          deleteStatus: 0,
+          createdBy: auth.user?.id,
+        });
+      }
+    } else {
       await Database.table("user_to_groups").insert({
         user_id: params.id,
-        group_id: element,
+        group_id: groupName,
         deleteStatus: 0,
         createdBy: auth.user?.id,
       });
     }
+
     response.redirect("/users");
   }
 
@@ -138,14 +165,15 @@ export default class UsersController {
   private async handleRequestSave(
     params: HttpContextContract["params"],
     request: HttpContextContract["request"],
-    operationType: string
+    operationType: string,
+    auth?: HttpContextContract["auth"]
   ) {
     const user = params.id ? await User.findOrFail(params.id) : new User();
     const req = await request.validate(UserValidator);
     switch (operationType) {
-      case "add":
-        user.merge({ ...req }).save();
-        break;
+      case "add": {
+        return user.merge({ ...req, createdBy: auth?.user?.id }).save();
+      }
 
       default:
         break;

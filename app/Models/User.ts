@@ -24,6 +24,9 @@ export default class User extends BaseModel {
   @column({columnName: "deleteBy"})
   public deletedBy: number
 
+  @column({columnName: "createdBy"})
+  public createdBy: number
+
   @column()
   public rememberHeToken?: string
 

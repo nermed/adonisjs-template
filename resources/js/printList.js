@@ -1,0 +1,3 @@
+printDossierDetail = () => {
+  window.print();
+};
