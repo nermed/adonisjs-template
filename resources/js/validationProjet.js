@@ -95,7 +95,7 @@ const validateFn = ({ projetCommandeId, type, choice }) => {
     .then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: `http://127.0.0.1:3333/dossier/projetCommande/confirmProjetCommande/${projetCommandeId}`,
+          url: `/dossier/projetCommande/confirmProjetCommande/${projetCommandeId}`,
           method: "POST",
           dataType: "json",
           data: { type, choice },
@@ -136,7 +136,7 @@ const declineFn = ({ projetCommandeId, type, choice }) => {
     showLoaderOnConfirm: true,
     preConfirm: async (message) => {
       $.ajax({
-        url: `http://127.0.0.1:3333/dossier/projetCommande/confirmProjetCommande/${projetCommandeId}`,
+        url: `/dossier/projetCommande/confirmProjetCommande/${projetCommandeId}`,
         method: "POST",
         dataType: "json",
         data: { type, choice, message },
@@ -173,7 +173,7 @@ const declineFn = ({ projetCommandeId, type, choice }) => {
   //   .then((result) => {
   //     if (result.isConfirmed) {
   //       $.ajax({
-  //         url: `http://127.0.0.1:3333/dossier/projetCommande/confirmProjetCommande/${projetCommandeId}`,
+  //         url: `/dossier/projetCommande/confirmProjetCommande/${projetCommandeId}`,
   //         method: "POST",
   //         dataType: "json",
   //         data: { type, choice },

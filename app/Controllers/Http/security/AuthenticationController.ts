@@ -1,7 +1,7 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import Database from "@ioc:Adonis/Lucid/Database";
+// import Database from "@ioc:Adonis/Lucid/Database";
 import User from "App/Models/User";
-import Ws from "App/Services/Ws";
+// import Ws from "App/Services/Ws";
 import LoginValidator from "App/Validators/LoginValidator";
 import UserValidator from "App/Validators/UserValidator";
 
@@ -14,10 +14,10 @@ export default class AuthenticationController {
     const { email, password } = await request.validate(LoginValidator);
 
     try {
-      const user = await auth.attempt(email, password);
-      const group_id = await (await Database.from('user_to_groups').where('user_id', user.id)).find(user_id => user.id == user_id.user_id);
-      console.log(group_id);
-      Ws.io.socketsJoin(group_id.group_id);
+      await auth.attempt(email, password);
+      // const group_id = await (await Database.from('user_to_groups').where('user_id', user.id)).find(user_id => user.id == user_id.user_id);
+      // console.log(group_id);
+      // Ws.io.socketsJoin(group_id.group_id);
       return response.redirect("/dossiers");
     } catch (error) {
       // return error;

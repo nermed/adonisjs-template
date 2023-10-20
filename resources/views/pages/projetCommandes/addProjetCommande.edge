@@ -5,7 +5,8 @@
     <div class="row mb-2">
       <div class="col-sm-6">
         <h1 class="m-0">{{title}}</h1>
-        <span class="font-italic">Projet de commande de <span class="font-weight-bolder text-uppercase">{{dossier_detail.designation}}</span></span>
+        <span class="font-italic">Projet de commande de <span
+            class="font-weight-bolder text-uppercase">{{dossier_detail.designation}}</span></span>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -75,24 +76,24 @@
 
         </div>
       </div>
+      @can('project_commande_add_fournisseur')
       <div class="col-12 row align-items-center">
-        <p class="mr-4">Personne à Avertir</p>
+        <p class="mr-4">Fournisseur</p>
         <div class="col-sm-12 col-lg-4 col-md-4">
-          <div class="form-group">
-            <input type="text" class="form-control" id="personneAvertir1">
-          </div>
-        </div>
-        <div class="col-sm-12 col-lg-4 col-md-4">
-          <div class="form-group">
-            <input type="text" class="form-control" id="personneAvertir2">
-          </div>
+          @!component('pages/components/input', {
+          name: "personneAvertir",
+          label: "",
+          typeInput: 'text',
+          options: fournisseurs.reduce((acc, c) => ({...acc, [c.id]: c.name}), {}),
+          })
         </div>
       </div>
+      @endcan
       <div class="col-12 row align-items-center">
         <p class="mr-4">Information du chantier</p>
         <div class="col-sm-12 col-lg-4 col-md-4">
           <div class="form-group">
-            <input type="text" class="form-control" id="infoChantier">
+            <input type="text" value="{{ dossier.title }}" readonly class="form-control" id="infoChantier">
           </div>
         </div>
       </div>

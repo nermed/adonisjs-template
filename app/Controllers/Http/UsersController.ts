@@ -1,6 +1,6 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import User from "App/Models/User";
-import Group from "App/Models/Group";
+import Group from "App/Models/UserGroup";
 import { schema, rules } from "@ioc:Adonis/Core/Validator";
 import UserValidator from "App/Validators/UserValidator";
 import Database from "@ioc:Adonis/Lucid/Database";
@@ -9,7 +9,7 @@ export default class UsersController {
   async index({ view }: HttpContextContract) {
     // const users = await User.all();
     const req = await Database.rawQuery(
-      "SELECT user.*, groupp.name as groupName FROM users as user left join user_to_groups as userGroup on user.id = userGroup.user_id left join groups as groupp on groupp.id = userGroup.group_id"
+      "SELECT user.*, groupp.name as groupName FROM users as user left join user_to_groups as userGroup on user.id = userGroup.user_id left join user_groups as groupp on groupp.id = userGroup.group_id"
     ).exec();
     const reducers = req[0].reduce(function (acc: any, c: any) {
       // let news = {};

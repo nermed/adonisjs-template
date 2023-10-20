@@ -20,19 +20,17 @@
 <div class="col-12">
   @if(projetCommande)
   <div class="card" id="projetCommandeView">
-    <div class="card-header d-flex justify-content-end">
+    <div class="card-header d-flex justify-content-end d-print-none">
       {{-- <div>
         <p>Projet de commande de <span class="font-weight-bolder">{{dossier.designation}}</span></p>
       </div> --}}
       <div class="d-flex justify-content-end">
-        @if(projetCommandeValidations.serviceDemandeur != '7')
         @can('document_add_project')
         <a type="button" href="{{route('editprojetcommandes', {id: projetCommande.id})}}"
           class="btn btn-primary mr-2">Modifier</a>
         @endcan
-        @endif
         @can('document_print')
-        <button class="btn btn-default">Imprimer</button>
+        <button class="btn btn-default" onclick="printProjetDetail()">Imprimer</button>
         @endcan
       </div>
     </div>
@@ -99,23 +97,14 @@
         </div>
       </div>
       <div class="col-12 row align-items-center">
-        <p class="mr-4">Personne à Avertir</p>
-        @if(projetCommande.personneAvertir)
-        @each((personne, index) in projetCommande.personneAvertir.split(";"))
+        <p class="mr-4">Fournisseur</p>
         <div class="col-sm-12 col-lg-4 col-md-4">
           <div class="form-group">
-            <input type="text" class="form-control" value="{{personne != 'null' ? personne : ''}}" readonly
+            <input type="text" class="form-control"
+              value="{{projetCommande.fournisseur_name ? projetCommande.fournisseur_name : ''}}" readonly
               id="personneAvertir1">
           </div>
         </div>
-        @endeach
-        @else
-        <div class="col-sm-12 col-lg-4 col-md-4">
-          <div class="form-group">
-            <input type="text" class="form-control" readonly id="personneAvertir1">
-          </div>
-        </div>
-        @endif
       </div>
       <div class="col-12 row align-items-center">
         <p class="mr-4">Information du chantier</p>
@@ -155,7 +144,7 @@
             <td>{{detail.ref_post_budget}}</td>
             <td>{{detail.numeroRef}}</td>
             <td>{{detail.designationAffectation}}</td>
-            <td>{{detail.quantiteDemande}}</td>
+            <td>{{formatAmount(detail.quantiteDemande)}}</td>
             {{-- <td>{{detail.montantEstime}}</td>
             <td>{{detail.niveauStockMagasin}}</td> --}}
             <td>{{detail.observation}}</td>
@@ -311,4 +300,40 @@
   </div>
   @endif
 </div>
+@can('document_print')
+<div id="letter_print" style="padding: 20px;margin: auto;page-break-before: always">
+  <div style="margin-bottom: 20px; display: flex;justify-content: space-between">
+    <div style="display:flex;flex-direction: column">
+      <span style="margin-bottom: 8px; font-weight: 600">Nom de l'entreprise</span>
+      <span style="margin-bottom: 8px; font-weight: 600">Adresse de l'entreprise</span>
+      <span style="margin-bottom: 8px; font-weight: 600">Num de l'entreprise</span>
+    </div>
+    <p style="float: right;">Date: 09 août 2023</p>
+  </div>
+  <div style="position: relative; left: 60%">
+    <p style="font-size: 18px">A l'attention du Responsable de <span style="font-weight: 600">{{projetCommande.fournisseur_name}}</span></p>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <h5>Objet: Exemple de lettre</h5>
+  </div>
+
+  <div style="line-height: 1.5;">
+    <p>Cher destinataire,</p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc id aliquam tincidunt, nisl nunc
+      aliquet nunc, id lacinia nunc nunc id nunc. Nulla facilisi. Sed euismod, nunc id aliquam tincidunt, nisl nunc
+      aliquet nunc, id lacinia nunc nunc id nunc.</p>
+
+    <p>Curabitur euismod, nunc id aliquam tincidunt, nisl nunc aliquet nunc, id lacinia nunc nunc id nunc. Nulla
+      facilisi. Sed euismod, nunc id aliquam tincidunt, nisl nunc aliquet nunc, id lacinia nunc nunc id nunc.</p>
+
+    <p>Proin euismod, nunc id aliquam tincidunt, nisl nunc aliquet nunc, id lacinia nunc nunc id nunc. Nulla facilisi.
+      Sed euismod, nunc id aliquam tincidunt, nisl nunc aliquet nunc, id lacinia nunc nunc id nunc.</p>
+
+    <p>Regards,</p>
+    <p>Votre nom</p>
+  </div>
+</div>
+@endcan
 @endsection

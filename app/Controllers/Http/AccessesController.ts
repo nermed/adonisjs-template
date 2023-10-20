@@ -1,11 +1,11 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Database from "@ioc:Adonis/Lucid/Database";
-import Group from "App/Models/Group";
 import Permission from "App/Models/Permission";
+import UserGroup from "App/Models/UserGroup";
 
 export default class AccessesController {
   async index({ view }: HttpContextContract) {
-    const groups = await Database.from(Group.table).where('delete_status', '0');
+    const groups = await Database.from(UserGroup.table).where('delete_status', '0');
     const permissions = await Database.from(Permission.table);
     const dataRanged = this.rangePermissionsData(permissions);
     // console.log(dataRanged);

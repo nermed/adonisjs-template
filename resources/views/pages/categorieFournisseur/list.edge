@@ -1,0 +1,81 @@
+@layout('layout/main')
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+        <span class="font-italic">{{categories.length}} élément{{categories.length > 1 ? 's':''}}</span>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+<div class="card col-12 p-2">
+  <div class="col-12 d-flex justify-content-end px-4">
+    {{--  <a type="button" href="{{route('adddossier')}}" class="btn btn-primary btn-sm mr-2">Ajouter un fournisseur</a>  --}}
+    <a type="button" href="{{route('addfournisseurscategorie')}}" class="btn btn-primary btn-sm mr-2">Ajouter un secteur d'activité</a>
+  </div>
+  <div class="card-body table-responsive pt-4">
+    <table class="table table-hover table-bordered">
+      <thead>
+        <tr>
+          {{-- <th>ID</th> --}}
+          <th width="250">Entitulé</th>
+          {{-- <th>Description</th> --}}
+          <th>Description</th>
+          <th>Date de Création</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if(categories.length > 0)
+        @each((categorie, index) in categories)
+        <td>{{categorie.name}}</td>
+        <td>{{categorie.description == null ? '' : categorie.description}}</td>
+        <td>{{categorie.created_at.toLocaleString()}}</td>
+        <td>
+          <a type="button" href="{{route('editfournisseurscategorie', {id: categorie.id})}}" class="btn btn-secondary btn-sm mr-2"><i
+              class="fa fa-pen"></i></a>
+        </td>
+        @endeach
+        @else
+        <tr>
+          <td colspan="6" style="text-align: center">Aucun secteur d'activité</td>
+        </tr>
+        @endif
+
+      </tbody>
+    </table>
+  </div>
+  <div id="myDiagrammeDetail" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Avancé</h4>
+        </div>
+        <div id="diagramme"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<nav class="col-12 d-flex justify-content-center pt-4">
+  <ul class="pagination">
+    @each(anchor in categories.getUrlsForRange(1, categories.lastPage))
+    <li class="page-item">
+      <a href="{{ anchor.url }}" class="page-link">{{ anchor.page }}</a>
+    </li>
+    @end
+  </ul>
+</nav>
+@endsection

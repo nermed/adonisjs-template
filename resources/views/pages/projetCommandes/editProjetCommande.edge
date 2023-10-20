@@ -78,32 +78,27 @@
               Chef d'axe
             </label>
           </div>
-
         </div>
       </div>
+      @can('project_commande_add_fournisseur')
       <div class="col-12 row align-items-center">
-        <p class="mr-4">Personne à Avertir</p>
-        @if(projetCommande.personneAvertir == undefined)
-        @each((personne, indexPersonne) in projetCommande.personneAvertir.split(";"))
+        <p class="mr-4">Fournisseur</p>
         <div class="col-sm-12 col-lg-4 col-md-4">
-          <div class="form-group">
-            <input type="text" class="form-control" value="{{personne}}" id="personneAvertir{{indexPersonne + 1}}">
-          </div>
+          @!component('pages/components/input', {
+          name: "personneAvertir",
+          label: "",
+          typeInput: 'text',
+          value: projetCommande.personneAvertir,
+          options: fournisseurs.reduce((acc, c) => ({...acc, [c.id]: c.name}), {}),
+          })
         </div>
-        @endeach
-        @else
-        <div class="col-sm-12 col-lg-4 col-md-4">
-          <div class="form-group">
-            <input type="text" class="form-control" id="personneAvertir1">
-          </div>
-        </div>
-        @endif
       </div>
+      @endcan
       <div class="col-12 row align-items-center">
         <p class="mr-4">Information du chantier</p>
         <div class="col-sm-12 col-lg-4 col-md-4">
           <div class="form-group">
-            <input type="text" class="form-control" value="{{projetCommande.info_chantier}}" id="infoChantier">
+            <input type="text" class="form-control" readonly value="{{projetCommande.info_chantier}}" id="infoChantier">
           </div>
         </div>
       </div>
@@ -129,7 +124,7 @@
         @!component('pages/components/input', {
         name: "numeroRef",
         label: "Numéro de Réference",
-        typeInput: 'text',
+        typeInput: 'number',
         })
       </div>
       <div class="col-sm-12 col-lg-6 col-md-6">

@@ -1,5 +1,7 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Database from "@ioc:Adonis/Lucid/Database";
+import ModeSuivi from "App/Models/ModeSuivi";
+import formatAmount from "Helpers/formatAmount";
 
 export default class ProjetCommandesController {
   async index({ params, view }: HttpContextContract) {
@@ -20,10 +22,14 @@ export default class ProjetCommandesController {
     ).find((res) => res.detail_id == params.id);
     console.log(dossier);
     const projetCommande = await (
-      await Database.from("projet_commandes").where(
-        "id_dossier_detail",
-        params.id
-      )
+      await Database.from("projet_commandes")
+        .where("id_dossier_detail", params.id)
+        .leftJoin(
+          "fournisseurs",
+          "fournisseurs.id",
+          "projet_commandes.personneAvertir"
+        )
+        .select("projet_commandes.*", "fournisseurs.name as fournisseur_name")
     ).find((res) => res.id_dossier_detail == params.id);
     let projetCommandeDetails: any[] = [];
     let projetCommandeValidations: any;
@@ -65,6 +71,7 @@ export default class ProjetCommandesController {
       projetCommandeValidations,
       projetCommandeMessages,
       params,
+      formatAmount,
     });
   }
 
@@ -86,11 +93,18 @@ export default class ProjetCommandesController {
     const dossier_detail = await (
       await Database.from("dossier_details").where("id", params.id)
     ).find((res) => res.id == params.id);
+    const dossier = await (
+      await Database.from("dossiers").where("id", dossier_detail.id_dossier)
+    ).find((res) => res.id == dossier_detail.id_dossier);
+    const fournisseurs = await Database.from("fournisseurs");
+
     return view.render("pages/projetCommandes/addProjetCommande", {
       title: "Ajouter un projet de Commande",
       projetCommande,
       dossier_detail,
+      dossier,
       params,
+      fournisseurs,
     });
   }
 
@@ -115,12 +129,14 @@ export default class ProjetCommandesController {
         projetCommande.id
       );
     }
+    const fournisseurs = await Database.from("fournisseurs");
 
     return view.render("pages/projetCommandes/editProjetCommande", {
       title: "Modifier le projet de Commande",
       projetCommande,
       details,
       params,
+      fournisseurs,
     });
   }
 
@@ -130,31 +146,33 @@ export default class ProjetCommandesController {
       checkChoosen,
       dateEmission,
       infoChantier,
-      personneAvertir1,
-      personneAvertir2,
+      personneAvertir,
     } = request.all();
     const userId = auth.user?.id;
+    const data = {
+      id_dossier_detail: params.id,
+      date_emission: dateEmission,
+      info_chantier: infoChantier,
+      traitement: checkChoosen[0],
+      origineProjet: checkChoosen[1],
+      personneAvertir: `${personneAvertir}`,
+      created_by: userId,
+    };
     const projetCommande = await Database.table("projet_commandes")
       .returning("id")
-      .insert({
-        id_dossier_detail: params.id,
-        date_emission: dateEmission,
-        info_chantier: infoChantier,
-        traitement: checkChoosen[0],
-        origineProjet: checkChoosen[1],
-        personneAvertir: `${personneAvertir1};${personneAvertir2}`,
-        created_by: userId,
-      });
+      .insert(data);
     if (projetCommande) {
-      for (let i = 0; i < arrayToSend.length; i++) {
-        const detail = arrayToSend[i];
-        await Database.table("projet_commande_details")
-          .returning("id")
-          .insert({
-            id_projet_commande: projetCommande,
-            ...detail,
-            created_by: userId,
-          });
+      if (arrayToSend && arrayToSend.length) {
+        for (let i = 0; i < arrayToSend.length; i++) {
+          const detail = arrayToSend[i];
+          await Database.table("projet_commande_details")
+            .returning("id")
+            .insert({
+              id_projet_commande: projetCommande,
+              ...detail,
+              created_by: userId,
+            });
+        }
       }
       await Database.table("projet_commande_validations").insert({
         id_projet_commande: projetCommande,
@@ -164,13 +182,15 @@ export default class ProjetCommandesController {
         dtr: "2",
         dgArb: "2",
       });
+      await this.modeSuivi("Ajout du projet de commande", auth, data);
     }
-    return { status: "success", message: "Succès!" };
+    return {
+      status: "success",
+      message: "Succès!",
+      dataResponse: { id_dossier_detail: params.id },
+    };
   }
-  async storeEditProjetCommande({
-    auth,
-    request,
-  }: HttpContextContract) {
+  async storeEditProjetCommande({ auth, request }: HttpContextContract) {
     const {
       arrayToSend,
       arrayNew,
@@ -190,6 +210,9 @@ export default class ProjetCommandesController {
         origineProjet: checkChoosen[1],
         personneAvertir: personneAvertir ? personneAvertir : "",
       });
+    const id_dossier_detail = await Database.from("projet_commandes")
+      .where("id", idProjetCommande)
+      .select("id_dossier_detail");
     if (projetCommande) {
       if (arrayToSend) {
         for (let i = 0; i < arrayToSend.length; i++) {
@@ -201,8 +224,8 @@ export default class ProjetCommandesController {
               numeroRef: detail.numeroRef,
               designationAffectation: detail.designationAffectation,
               quantiteDemande: detail.quantiteDemande,
-              montantEstime: detail.montantEstime,
-              niveauStockMagasin: detail.niveauStockMagasin,
+              // montantEstime: detail.montantEstime,
+              // niveauStockMagasin: detail.niveauStockMagasin,
               observation: detail.observation,
             });
         }
@@ -211,13 +234,38 @@ export default class ProjetCommandesController {
         for (let i = 0; i < arrayNew.length; i++) {
           const detailNew = arrayNew[i];
           await Database.table("projet_commande_details").insert({
+            id_projet_commande: idProjetCommande,
             ...detailNew,
             created_by: userId,
           });
         }
       }
+      const projectValidation = await Database.from(
+        "projet_commande_validations"
+      ).where("id_projet_commande", idProjetCommande);
+      if (projectValidation.length == 0) {
+        await Database.table("projet_commande_validations").insert({
+          id_projet_commande: projetCommande,
+          serviceDemandeur: "2",
+          dispoBudgetaire: "2",
+          directionFondsRoutier: "2",
+          dtr: "2",
+          dgArb: "2",
+        });
+      }
+      await this.modeSuivi("Modification du projet de commande", auth, {
+        arrayToSend,
+        arrayNew,
+      });
     }
-    return { status: "success", message: "Success" };
+    console.log(projetCommande);
+    return {
+      status: "success",
+      message: "Success",
+      dataResponse: {
+        id_dossier_detail: id_dossier_detail[0].id_dossier_detail,
+      },
+    };
   }
 
   async confirmProjetCommande({
@@ -261,6 +309,11 @@ export default class ProjetCommandesController {
               .update({
                 serviceDemandeur: choice == "validate" ? "1" : "0",
               });
+            await this.modeSuivi(
+              "Validation du projet de commande par l'ingénieur",
+              auth,
+              { id: params.id }
+            );
             return {
               status: "success",
               message: "Validation effectuée avec le succès!",
@@ -274,6 +327,11 @@ export default class ProjetCommandesController {
               dtr: "2",
               dgArb: "2",
             });
+            await this.modeSuivi(
+              "Validation du projet de commande par l'ingénieur",
+              auth,
+              { id: params.id }
+            );
             return {
               status: "success",
               message: "Validation effectuée avec le succès!",
@@ -306,6 +364,17 @@ export default class ProjetCommandesController {
               created_by: auth.user?.id,
               reference: dossier.assigned_to,
             });
+            await this.modeSuivi(
+              "Déclin du projet de commande par le Responsable du Budget",
+              auth,
+              { id: params.id }
+            );
+          } else {
+            await this.modeSuivi(
+              "Validation du projet de commande par le Responsable du Budget",
+              auth,
+              { id: params.id }
+            );
           }
 
           return {
@@ -343,6 +412,17 @@ export default class ProjetCommandesController {
               created_by: auth.user?.id,
               reference: dossier.assigned_to,
             });
+            await this.modeSuivi(
+              "Déclin du projet de commande par le Directeur de Fonds Routier",
+              auth,
+              { id: params.id }
+            );
+          } else {
+            await this.modeSuivi(
+              "Validation du projet de commande par le Directeur de Fonds Routier",
+              auth,
+              { id: params.id }
+            );
           }
           return {
             status: "success",
@@ -378,6 +458,17 @@ export default class ProjetCommandesController {
               created_by: auth.user?.id,
               reference: dossier.assigned_to,
             });
+            await this.modeSuivi(
+              "Déclin du projet de commande par le DTR",
+              auth,
+              { id: params.id }
+            );
+          } else {
+            await this.modeSuivi(
+              "Validation du projet de commande par le DTR",
+              auth,
+              { id: params.id }
+            );
           }
           return {
             status: "success",
@@ -414,6 +505,17 @@ export default class ProjetCommandesController {
               created_by: auth.user?.id,
               reference: dossier.assigned_to,
             });
+            await this.modeSuivi(
+              "Déclin du projet de commande par le DG",
+              auth,
+              { id: params.id }
+            );
+          } else {
+            await this.modeSuivi(
+              "Validation du projet de commande par le DG",
+              auth,
+              { id: params.id }
+            );
           }
           return {
             status: "success",
@@ -430,5 +532,16 @@ export default class ProjetCommandesController {
       default:
         break;
     }
+  }
+  private async modeSuivi(
+    ref: string,
+    auth: HttpContextContract["auth"],
+    details: any
+  ) {
+    await Database.table(ModeSuivi.table).insert({
+      reference: ref,
+      details: details,
+      created_by: auth.user?.id,
+    });
   }
 }

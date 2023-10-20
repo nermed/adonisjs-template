@@ -14,6 +14,7 @@
   "assets/fonts/fa-brands-400.eot": "http://localhost:8080/assets/fonts/fa-brands-400.23f19bb0.eot",
   "assets/fonts/fa-brands-400.ttf": "http://localhost:8080/assets/fonts/fa-brands-400.527940b1.ttf",
   "assets/images/img/boxed-bg.jpg": "http://localhost:8080/assets/images/img/boxed-bg.b6a91122.jpg",
+  "assets/images/img/chantier.jpg": "http://localhost:8080/assets/images/img/chantier.931eb1d5.jpg",
   "assets/fonts/fa-solid-900.woff": "http://localhost:8080/assets/fonts/fa-solid-900.eeccf4f6.woff",
   "assets/fonts/fa-brands-400.woff": "http://localhost:8080/assets/fonts/fa-brands-400.2285773e.woff",
   "assets/fonts/fa-solid-900.woff2": "http://localhost:8080/assets/fonts/fa-solid-900.1551f4f6.woff2",
@@ -53,5 +54,6 @@
   "assets/images/img/credit/paypal2.png": "http://localhost:8080/assets/images/img/credit/paypal2.3442932e.png",
   "assets/images/img/icons.png": "http://localhost:8080/assets/images/img/icons.c1df815a.png",
   "assets/images/img/credit/visa.png": "http://localhost:8080/assets/images/img/credit/visa.414cc8b9.png",
-  "assets/images/img/default-150x150.png": "http://localhost:8080/assets/images/img/default-150x150.661f5448.png"
+  "assets/images/img/default-150x150.png": "http://localhost:8080/assets/images/img/default-150x150.661f5448.png",
+  "assets/images/img/logo_ingenieur.png": "http://localhost:8080/assets/images/img/logo_ingenieur.621ab7fa.png"
 }

@@ -11,7 +11,7 @@ $(document).ready(function () {
       dataToSend.push(`${input.id}-${input.checked}`);
     }
     $.ajax({
-      url: "http://127.0.0.1:3333/access",
+      url: "/access",
       method: "POST",
       dataType: "json",
       data: { dataToSend, select },
@@ -27,7 +27,7 @@ $(document).ready(function () {
     const selectValue = $("#access-form select").val();
     $("#access-form input[type=checkbox]").attr("checked", false);
     $.ajax({
-      url: "http://127.0.0.1:3333/access/getAccess",
+      url: "/access/getAccess",
       method: "POST",
       dataType: "json",
       data: { groupId: selectValue },
@@ -48,7 +48,7 @@ $(document).ready(function () {
   });
   setUserActif = (itemId) => {
     $.ajax({
-      url: "http://127.0.0.1:3333/user/changeStatus",
+      url: "/user/changeStatus",
       method: "POST",
       dataType: "json",
       data: { userId: itemId },

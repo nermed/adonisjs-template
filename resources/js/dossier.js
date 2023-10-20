@@ -33,13 +33,8 @@ $("#createDossierButton").on("click", function () {
         } else {
           $("#createDossier #message").removeClass("is-invalid");
         }
-        console.log(assigns);
-        if (assigns.length == 0) {
-          $("#createDossier select[name=assignation]").addClass("is-invalid");
-          return;
-        }
         $.ajax({
-          url: "http://127.0.0.1:3333/dossier/storeDossier",
+          url: "/dossier/storeDossier",
           method: "POST",
           dataType: "json",
           data: { assign, assigns, dossierTitle: title, message },
@@ -168,7 +163,7 @@ $("#addDossierButton").on("click", () => {
     // console.log($(tr).find("td[fromInputName]"));
   }
   $.ajax({
-    url: "http://127.0.0.1:3333/dossier/storeDossier",
+    url: "/dossier/storeDossier",
     method: "POST",
     dataType: "json",
     data: { arrayToSend, dossierTitle: entitle },
@@ -187,8 +182,7 @@ $("#addProjetCommandeButton").on("click", function () {
   const idDossierDetail = $(this).attr("idDossierDetail");
   const trFind = $("#projetCommandeList").find("tr");
   const inputRadioFind = $("#addProjetCommande input[type=radio]");
-  const personneAvertir1 = $("#personneAvertir1").val();
-  const personneAvertir2 = $("#personneAvertir2").val();
+  const personneAvertir = $("#personneAvertir").val();
   const infoChantier = $("#infoChantier").val();
   const dateEmission = $("#dateEmission").val();
   if (!dateEmission) {
@@ -219,22 +213,22 @@ $("#addProjetCommandeButton").on("click", function () {
     // console.log($(tr).find("td[fromInputName]"));
   }
   $.ajax({
-    url: `http://127.0.0.1:3333/dossier/projetCommande/storeProjetCommande/${idDossierDetail}`,
+    url: `/dossier/projetCommande/storeProjetCommande/${idDossierDetail}`,
     method: "POST",
     dataType: "json",
     data: {
       arrayToSend,
       dateEmission,
       infoChantier,
-      personneAvertir1,
-      personneAvertir2,
+      personneAvertir,
       checkChoosen,
     },
     success: function (data) {
       console.log(data);
+      $(this).removeAttr("disabled");
       if (data.status == "success") {
         swal.fire("Succès!", "Succès!", "success");
-        window.location.replace('/dossiers');
+        window.location.replace('/dossier/projetCommande/' + data.dataResponse.id_dossier_detail);
       } else {
         swal.fire("Erreur!", `${data.message}`, "error");
       }
@@ -528,7 +522,7 @@ $("#confirmEditDossierButton").on("click", function () {
           ];
         // console.log(idDossier);
         $.ajax({
-          url: `http://127.0.0.1:3333/dossier/editStoreDossier/${idDossier}`,
+          url: `/dossier/editStoreDossier/${idDossier}`,
           method: "POST",
           dataType: "json",
           data: { arrayToSend, arrayNew, dossierTitle: entitle },
@@ -559,11 +553,11 @@ $("#confirmEditProjetButton").on("click", function () {
   const idProjetCommande = $(this).attr("idProjetCommandeDetail");
   const trFind = $("#projetCommandeEditList").find("tr");
   const inputRadioFind = $("#editProjetCommandeHeader input[type=radio]");
-  const personneAvertir1 = $("#personneAvertir1").val();
-  const personneAvertir2 = $("#personneAvertir2").val();
-  const personneAvertir = personneAvertir1
-    ? `${personneAvertir1}${personneAvertir2 ? `;${personneAvertir2}` : ""}`
-    : `${personneAvertir2}`;
+  const personneAvertir = $("#personneAvertir").val();
+  // const personneAvertir2 = $("#personneAvertir2").val();
+  // const personneAvertir = personneAvertir1
+  //   ? `${personneAvertir1}${personneAvertir2 ? `;${personneAvertir2}` : ""}`
+  //   : `${personneAvertir2}`;
   const infoChantier = $("#infoChantier").val();
   const dateEmission = $("#dateEmission").val();
   if (!dateEmission) {
@@ -593,9 +587,7 @@ $("#confirmEditProjetButton").on("click", function () {
         numeroRef: tdFind[1].innerHTML,
         designationAffectation: tdFind[2].innerHTML,
         quantiteDemande: tdFind[3].innerHTML,
-        montantEstime: tdFind[4].innerHTML,
-        niveauStockMagasin: tdFind[5].innerHTML,
-        observation: tdFind[6].innerHTML,
+        observation: tdFind[4].innerHTML,
       });
     } else {
       arrayToSend.push({
@@ -604,9 +596,7 @@ $("#confirmEditProjetButton").on("click", function () {
         numeroRef: tdFind[1].innerHTML,
         designationAffectation: tdFind[2].innerHTML,
         quantiteDemande: tdFind[3].innerHTML,
-        montantEstime: tdFind[4].innerHTML,
-        niveauStockMagasin: tdFind[5].innerHTML,
-        observation: tdFind[6].innerHTML,
+        observation: tdFind[4].innerHTML,
       });
     }
     // console.log($(tr).find("td[fromInputName]"));
@@ -629,7 +619,7 @@ $("#confirmEditProjetButton").on("click", function () {
     .then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: `http://127.0.0.1:3333/dossier/projetCommande/storeEditProjetCommande/${idDossier}`,
+          url: `/dossier/projetCommande/storeEditProjetCommande/${idDossier}`,
           method: "POST",
           dataType: "json",
           data: {
@@ -650,7 +640,7 @@ $("#confirmEditProjetButton").on("click", function () {
                 style: "info",
               });
               const timer = setInterval(() => {
-                window.location.replace('/dossier/detail/'+ idDossier);
+                window.location.replace('/dossier/projetCommande/'+ data.dataResponse.id_dossier_detail);
                 clearInterval(timer);
               }, 1500);
             }
@@ -693,7 +683,7 @@ $("#confirmAddingPriceDossierButton").on("click", function () {
       window.location.pathname.split("/").length - 1
     ];
   $.ajax({
-    url: `http://127.0.0.1:3333/dossier/addPriceDossier/${idDossier}`,
+    url: `/dossier/addPriceDossier/${idDossier}`,
     method: "POST",
     dataType: "json",
     data: { arrayToSend, inputFiles },
@@ -742,7 +732,7 @@ $("#dossierDetailConfirm").on("click", function (e) {
     .then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: `http://127.0.0.1:3333/dossier/confirmDossier/${idDossier}`,
+          url: `/dossier/confirmDossier/${idDossier}`,
           method: "POST",
           dataType: "json",
           // data: { arrayToSend },
@@ -767,7 +757,7 @@ $("#dossierDetailConfirm").on("click", function (e) {
         });
       } else if (result.isDenied) {
         $.ajax({
-          url: `http://127.0.0.1:3333/dossier/confirmDossier/${idDossier}`,
+          url: `/dossier/confirmDossier/${idDossier}`,
           method: "POST",
           dataType: "json",
           data: { withProject: true },
@@ -815,7 +805,7 @@ $("#dossierDetailRefuse").on("click", function (e) {
     .then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: `http://127.0.0.1:3333/dossier/denieDossier/${idDossier}`,
+          url: `/dossier/denieDossier/${idDossier}`,
           method: "POST",
           dataType: "json",
           // data: { arrayToSend },
@@ -840,7 +830,7 @@ $("#dossierDetailRefuse").on("click", function (e) {
         });
       } else if (result.isDenied) {
         $.ajax({
-          url: `http://127.0.0.1:3333/dossier/confirmDossier/${idDossier}`,
+          url: `/dossier/confirmDossier/${idDossier}`,
           method: "POST",
           dataType: "json",
           data: { withProject: true },

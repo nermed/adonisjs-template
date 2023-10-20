@@ -1,4 +1,4 @@
-// helpers/formatAmount.js
+// helpers/formatAmount.ts
 export default function formatAmount(amount: any) {
   // Convert the amount to a string and split it by the decimal point
   const [integer, decimal] = amount.toString().split(".");

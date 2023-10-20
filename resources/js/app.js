@@ -30,6 +30,8 @@ import "./printList";
 import "./validationProjet";
 import "./selectFiles";
 import "./socket";
+import "./modalControl";
+import "./fournisseurs";
 
 
 // swal.fire({

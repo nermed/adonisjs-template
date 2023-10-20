@@ -12,9 +12,42 @@
     </li>
     <li class="nav-item">
       <a href="{{route('dossiers')}}" class="nav-link {{(request.matchesRoute('dossiers')) ? 'active' : ''}}">
-        <i class="nav-icon fas fa-file"></i>
+        <i class="nav-icon fas fa-tasks"></i>
         <p>
           Dossier
+        </p>
+      </a>
+    </li>
+    <li class="nav-item menu-open">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-truck"></i>
+        <p>
+          Gestion de fournisseurs
+          <i class="fas fa-angle-left right"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="{{route('fournisseurs')}}"
+            class="nav-link {{(request.matchesRoute('fournisseurs')) ? 'active' : ''}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Fournisseurs</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{route('categoriefournisseurs')}}"
+            class="nav-link {{(request.matchesRoute('categoriefournisseurs')) ? 'active' : ''}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Secteur d'Activité</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="nav-item">
+      <a href="{{route('rapport')}}" class="nav-link {{(request.matchesRoute('rapport')) ? 'active' : ''}}">
+        <i class="nav-icon fas fa-list"></i>
+        <p>
+          Rapport
         </p>
       </a>
     </li>
@@ -58,17 +91,17 @@
             <p>{{item.text}}</p>
           </a>
         </li>
-        {{--  <a href="{{ item.url }}"> {{ item.text }} </a>  --}}
+        {{-- <a href="{{ item.url }}"> {{ item.text }} </a> --}}
         @end
       </ul>
     </li>
-    {{--  <li class="nav-item">
+    {{-- <li class="nav-item">
       <a href="{{route('settings')}}" class="nav-link">
         <i class="nav-icon fas fa-th"></i>
         <p>
           Settings
         </p>
       </a>
-    </li>  --}}
+    </li> --}}
   </ul>
 </nav>

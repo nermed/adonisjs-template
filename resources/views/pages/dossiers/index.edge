@@ -5,7 +5,7 @@
     <div class="row mb-2">
       <div class="col-sm-6">
         <h1 class="m-0">{{title}}</h1>
-        <span class="font-italic">{{dossiers.length}} éléments</span>
+        <span class="font-italic">{{dossiers.length}} élément{{dossiers.length > 1 ? 's':''}}</span>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -20,10 +20,10 @@
 @section('body')
 <div class="card col-12 p-2">
   <div class="col-12 d-flex justify-content-end px-4">
-    @can('document_affectation')
+    @can('document_create')
     <a type="button" href="{{route('adddossier')}}" class="btn btn-primary btn-sm mr-2">Ajouter un dossier</a>
     @endcan
-    @can('document_create')
+    @can('document_affectation')
     <a type="button" href="{{route('affectionsdossiers')}}" class="btn btn-primary btn-sm mr-2">Voir les
       affectations <span class="badge badge-danger">{{affectations.length}}</span></a>
     @endcan
@@ -37,7 +37,7 @@
           {{-- <th>Description</th> --}}
           <th>Affecté à</th>
           <th>Date de Création</th>
-          <th>Statut</th>
+          <th>Niveau</th>
           <th>Statut</th>
           <th>Action</th>
         </tr>

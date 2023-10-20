@@ -84,4 +84,20 @@ Route.group(() => {
   Route.post('/dossier/projetCommande/storeProjetCommande/:id','logics/ProjetCommandesController.storeProjetCommande')
   Route.post('/dossier/projetCommande/storeEditProjetCommande/:id','logics/ProjetCommandesController.storeEditProjetCommande')
   Route.post('/dossier/projetCommande/confirmProjetCommande/:id','logics/ProjetCommandesController.confirmProjetCommande')
+
+  // fournisseurs
+  Route.get('/fournisseurs', 'logics/FournisseursController.index').as('fournisseurs')
+  Route.get('/fournisseurs/secteurActivite', 'logics/FournisseursController.categorieList').as('categoriefournisseurs')
+  Route.get('/fournisseurs/add', 'logics/FournisseursController.addViewFournisseur').as('addfournisseurs')
+  Route.get('/fournisseurs/secteurActivite/add', 'logics/FournisseursController.addCategorie').as('addfournisseurscategorie')
+  Route.get('/fournisseurs/edit/:id', 'logics/FournisseursController.editViewFournisseur').as('editfournisseurs')
+  Route.get('/fournisseurs/secteurActivite/edit/:id', 'logics/FournisseursController.editCategorie').as('editfournisseurscategorie')
+  Route.get('/fournisseur/detail/:id', 'logics/FournisseursController.detailFournisseur').as('detailfournisseur')
+  Route.post('/fournisseurs/storeFournisseur', 'logics/FournisseursController.storeFournisseur')
+  Route.post('/fournisseurs/updateFournisseur/:id', 'logics/FournisseursController.updateFournisseur')
+  Route.post('/fournisseurs/storeFournisseurCategorie', 'logics/FournisseursController.storeFournisseurCategorie')
+  Route.post('/fournisseurs/updateFournisseurCategorie/:id', 'logics/FournisseursController.updateFournisseurCategorie')
+
+  // rapport
+  Route.get('rapport', 'logics/RapportsController.index').as('rapport')
 }).middleware('auth')

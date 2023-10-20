@@ -1,0 +1,142 @@
+@layout('layout/main')
+@section('header')
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">{{title}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+@endsection
+@section('body')
+<div class="col-12">
+  <div class="card" id="detailFournisseur">
+    {{-- <div class="card-header">
+      <h3 class="card-title">Quick Example</h3>
+    </div> --}}
+    {{-- <form action="/group/add" method="POST"> --}}
+      <div class="card-body">
+        <p style="font-weight:600; font-style:italic;font-size:20px">Information générale</p>
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            @!component('pages/components/input', {
+            name: "name",
+            label: "Nom de l'entreprise",
+            value: fournisseur.name,
+            typeInput: 'text',
+            placeholder: 'Enter',
+            disabled: true
+            })
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            @!component('pages/components/input', {
+            name: "nif",
+            label: "NIF",
+            value: fournisseur.nif,
+            typeInput: 'text',
+            placeholder: 'Enter',
+            disabled: true
+            })
+          </div>
+          <div class="col-sm-6 col-md-6">
+            @!component('pages/components/input', {
+            name: "telephone",
+            label: "Téléphone",
+            value: fournisseur.telephone,
+            typeInput: 'text',
+            placeholder: 'Enter',
+            disabled: true
+            })
+          </div>
+          <div class="col-sm-6 col-md-6">
+            @!component('pages/components/input', {
+            name: "address",
+            label: "Adresse",
+            value: fournisseur.address,
+            typeInput: 'text',
+            placeholder: 'Enter',
+            disabled: true
+            })
+          </div>
+          <div class="col-sm-6 col-md-6">
+            @!component('pages/components/input', {
+            name: "email",
+            label: "Email",
+            value: fournisseur.email,
+            typeInput: 'text',
+            placeholder: 'Enter',
+            disabled: true
+            })
+          </div>
+          <div class="col-md-6 col-lg-6 col-sm-6">
+            @!component('pages/components/input', {
+            name: "categorie",
+            label: "Secteur d'Activité",
+            value: fournisseur.categorie,
+            options: categories.reduce((acc, c) => ({...acc, [c.id]: c.name}), {}),
+            disabled: true
+            })
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            @!component('pages/components/input', {
+            name: "description",
+            label: "Autre information",
+            value: fournisseur.description,
+            typeInput: 'textarea',
+            placeholder: 'Enter',
+            disabled: true
+            })
+          </div>
+        </div>
+        <p style="font-weight:600; font-style:italic;font-size:20px">Méthode de paiement</p>
+        <div class="row">
+          <div class="col-md-6 col-lg-6 col-sm-12">
+            @!component('pages/components/input', {
+            name: "paymentMethod",
+            label: "Mode de paiement",
+            typeInput: 'text',
+            value: fournisseur.paymentMethod,
+            options: [{id: 'bank', name: 'Virement Bancaire'}, {id: 'cheque', name: 'Chèque'}, {id: 'espece', name:
+            'Espèces'}].reduce((acc, c) => ({...acc, [c.id]: c.name}), {}),
+            disabled: true
+            })
+          </div>
+          <div class="col-sm-6 col-md-6">
+            @!component('pages/components/input', {
+            name: "bank",
+            label: "Nom de la banque",
+            value: fournisseur.bank,
+            typeInput: 'text',
+            placeholder: 'Enter',
+            disabled: true
+            })
+          </div>
+          <div class="col-sm-6 col-md-6">
+            @!component('pages/components/input', {
+            name: "accountNumber",
+            label: "Numéro du compte",
+            value: fournisseur.accountNumber,
+            typeInput: 'text',
+            placeholder: 'Enter',
+            disabled: true
+            })
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a class="btn btn-secondary" href="javascript:history.back()">Retour</a>
+        <a type="button" href="{{route('editfournisseurs', {id: fournisseur.id})}}"
+          class="btn btn-primary mr-2">Modifier</a>
+      </div>
+  </div>
+  {{-- </form> --}}
+</div>
+@endsection

@@ -1,8 +1,8 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Database from "@ioc:Adonis/Lucid/Database";
-import Group from "App/Models/Group";
+import Group from "App/Models/UserGroup";
 import User from "App/Models/User";
-import GroupValidator from "App/Validators/GroupValidator";
+import GroupValidator from "App/Validators/UserGroupValidator";
 
 export default class GroupsController {
   async index({ request, view }: HttpContextContract) {

@@ -63,13 +63,19 @@ export const { actions } = Bouncer.define(
     return await verifyPermission(user, "document_create");
   }
 )
-  .define("document_edit", async (user: User, dossier: any) => {
-    if(await verifyPermission(user, "document_edit")) {
-      return dossier.created_by === user.id || dossier.assigned_to == user.id
+  .define("document_complete", async (user: User, dossier: any) => {
+    if (await verifyPermission(user, "document_complete")) {
+      return dossier.assigned_to == user.id;
     }
     return false;
   })
-  .define('document_print', async (user: User) => {
+  .define("document_edit", async (user: User, dossier: any) => {
+    if (await verifyPermission(user, "document_edit")) {
+      return dossier.created_by === user.id || dossier.assigned_to == user.id;
+    }
+    return false;
+  })
+  .define("document_print", async (user: User) => {
     return await verifyPermission(user, "document_print");
   })
   .define("document_affectation", async (user: User) => {
@@ -78,28 +84,39 @@ export const { actions } = Bouncer.define(
   .define("document_add_price", async (user: User) => {
     return await verifyPermission(user, "document_add_price");
   })
-  .define('document_add_project', async (user: User) => {
+  .define("document_add_project", async (user: User) => {
     return await verifyPermission(user, "document_add_project");
   })
-  .define('document_validate_service_demande', async (user: User) => {
+  .define("document_validate_service_demande", async (user: User) => {
     return await verifyPermission(user, "document_validate_service_demande");
   })
-  .define('document_validate_president_commission', async (user: User) => {
-    return await verifyPermission(user, "document_validate_president_commission");
+  .define("document_validate_president_commission", async (user: User) => {
+    return await verifyPermission(
+      user,
+      "document_validate_president_commission"
+    );
   })
-  .define('document_validate_disponibilite_budgetaire', async (user: User) => {
-    return await verifyPermission(user, "document_validate_disponibilite_budgetaire");
+  .define("document_validate_disponibilite_budgetaire", async (user: User) => {
+    return await verifyPermission(
+      user,
+      "document_validate_disponibilite_budgetaire"
+    );
   })
-  .define('document_validate_fonds_routier', async (user: User) => {
+  .define("document_validate_fonds_routier", async (user: User) => {
     return await verifyPermission(user, "document_validate_fonds_routier");
   })
-  .define('document_validate_direction', async (user: User) => {
+  .define("document_validate_direction", async (user: User) => {
     return await verifyPermission(user, "document_validate_direction");
   })
-  .define('document_validate_autorisation_dg_arb', async (user: User) => {
-    return await verifyPermission(user, "document_validate_autorisation_dg_arb");
+  .define("project_commande_add_fournisseur", async (user: User) => {
+    return await verifyPermission(user, "project_commande_add_fournisseur");
   })
-
+  .define("document_validate_autorisation_dg_arb", async (user: User) => {
+    return await verifyPermission(
+      user,
+      "document_validate_autorisation_dg_arb"
+    );
+  });
 /*
 |--------------------------------------------------------------------------
 | Bouncer Policies

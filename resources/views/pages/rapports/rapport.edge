@@ -19,54 +19,77 @@
 @endsection
 @section('body')
 <div class="card col-12 p-2">
-  {{--  <div class="col-12 d-flex justify-content-end px-4">
-    @can('document_affectation')
+  <div class="col-12 d-flex justify-content-end px-4">
+    {{-- @can('document_affectation')
     <a type="button" href="{{route('adddossier')}}" class="btn btn-primary btn-sm mr-2">Ajouter un dossier</a>
     @endcan
     @can('document_create')
-    <a type="button" href="{{route('adddossier')}}" class="btn btn-primary btn-sm mr-2">Voir les affectations</a>
-    @endcan
-  </div>  --}}
+    <a type="button" href="{{route('affectionsdossiers')}}" class="btn btn-primary btn-sm mr-2">Voir les
+      affectations <span class="badge badge-danger">{{affectations.length}}</span></a>
+    @endcan --}}
+  </div>
   <div class="card-body table-responsive pt-4">
     <table class="table table-hover table-bordered">
       <thead>
         <tr>
-          {{--  <th>ID</th>  --}}
+          {{-- <th>ID</th> --}}
           <th width="250">Entitulé</th>
-          <th>Message</th>
-          <th>Créé par</th>
+          {{-- <th>Description</th> --}}
+          <th>Affecté à</th>
           <th>Date de Création</th>
+          <th>Niveau</th>
+          <th>Statut</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
         @if(dossiers.length > 0)
-        @each((dossier, index) in dossiers.reverse())
+        @each((dossier, index) in dossiers)
         <tr>
-          {{--  <td>{{ index+1 }}</td>  --}}
+          {{-- <td>{{ index+1 }}</td> --}}
           <td>{{dossier.title}}</td>
-          <td>{{dossier.message}}</td>
           <td>{{dossier.username}}</td>
           <td>{{ dossier.created_at.toLocaleString() }}</td>
           <td>
+            <span class="badge bg-info">{{ niveauDossier(dossier.dossier_niveau) }}</span>
+          </td>
+          <td>
+            @if(dossier.dossier_niveau != "7")
+            <span class="badge bg-warning">En cours</span>
+            @else
+            <span class="badge bg-success">Complete</span>
+            @endif
+          </td>
+          <td>
             <div class="d-flex">
-              <a type="button" title="Modifier" href="{{route('editdossier', {id: dossier.id})}}"
-                class="btn btn-secondary btn-sm mr-2"><i class="fa fa-pen"></i></a>
-              {{--  <a type="button" title="Voir les détails" href="{{route('detaildossier', {id: dossier.id})}}"
-                class="btn btn-info btn-sm mr-2"><i class="fa fa-eye"></i></a>  --}}
+              <a type="button" title="Detail" data-toggle="modal" data-target="#myDiagrammeDetail" onclick="openModalRapport({{dossier.id}})" {{-- href="{{route('detaildossier', {id: dossier.id})}}" --}}
+                class="btn btn-info btn-sm mr-2" id="openModalRapportDetail-{{dossier.id}}"><i class="fa fa-eye"></i> Detail</a>
             </div>
           </td>
         </tr>
         @endeach
         @else
         <tr>
-          <td colspan="5" style="text-align: center">Aucun dossier</td>
+          <td colspan="6" style="text-align: center">Aucun dossier</td>
         </tr>
         @endif
 
       </tbody>
     </table>
   </div>
+  <div id="myDiagrammeDetail" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Avancé</h4>
+            </div>
+            <div id="diagramme"></div>
+        </div>
+
+    </div>
+</div>
 </div>
 <nav class="col-12 d-flex justify-content-center pt-4">
   <ul class="pagination">
@@ -74,7 +97,7 @@
     <li class="page-item">
       <a href="{{ anchor.url }}" class="page-link">{{ anchor.page }}</a>
     </li>
-    @endeach
+    @end
   </ul>
 </nav>
 @endsection
